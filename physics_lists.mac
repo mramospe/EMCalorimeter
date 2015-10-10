@@ -1,0 +1,12 @@
+# This macro allows to configure the physics lists used in the simulation
+/EMCal/physics/enableDecay
+#/EMCal/physics/enableEmDNA
+#/EMCal/physics/enableEmExtra
+#/EMCal/physics/enableLivermore
+#/EMCal/physics/enableLivermorePolarized
+#/EMCal/physics/enablePenelope
+/EMCal/physics/enableEmStandard
+#/EMCal/physics/enableEmStandard_option1
+#/EMCal/physics/enableEmStandard_option2
+#/EMCal/physics/enableEmStandard_option3
+/EMCal/physics/enableRadioactiveDecay
