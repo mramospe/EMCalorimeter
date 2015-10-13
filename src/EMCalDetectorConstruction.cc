@@ -48,6 +48,8 @@ EMCalDetectorConstruction::EMCalDetectorConstruction() :
   // Proportion detector_width/complete_width
   fModuleProportion = 1*m/( 1*m + 5*cm );
 
+  // Defines the materials
+  this -> DefineMaterials();
 }
 
 //___________________________________________________________
@@ -64,11 +66,11 @@ EMCalDetectorConstruction::~EMCalDetectorConstruction() {
 // Constructs the detector
 G4VPhysicalVolume* EMCalDetectorConstruction::Construct() {
 
+  // If the modules are defined they are deleted
+  fModuleArray.clear();
+
   // Get nist material manager
   G4NistManager* nist = G4NistManager::Instance();
-
-  // Defines the materials
-  this -> DefineMaterials();
 
   // Activates checking for overlaps
   bool checkOverlaps = true;

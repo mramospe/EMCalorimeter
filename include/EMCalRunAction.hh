@@ -48,9 +48,7 @@ inline void EMCalRunAction::CreateNewFile( const G4String name ) {
 inline TTree* EMCalRunAction::GetOutputTree() { return fOutputTree; }
 
 inline void EMCalRunAction::SetOutputTreeName( G4String name ) {
-
   fTreeName = name;
-
   G4cout << " Output tree name changed to <" << name << ">" << G4endl;
 }
 

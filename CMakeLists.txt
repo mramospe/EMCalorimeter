@@ -48,10 +48,10 @@ target_link_libraries(EMCalorimeter EMCalClasses ${Geant4_LIBRARIES} ${ROOT_LIBR
 # build EMCal. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 set(EMCAL_SCRIPTS
-  EMCalorimeter.out
   physics_lists.mac
   init_vis.mac
   vis.mac
+  run_example.mac
   )
 
 foreach(_script ${EMCAL_SCRIPTS})

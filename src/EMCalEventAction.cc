@@ -33,9 +33,10 @@ void EMCalEventAction::EndOfEventAction( const G4Event *event ) {
     = static_cast<EMCalRun*>( G4RunManager::GetRunManager() -> 
 			      GetNonConstCurrentRun() );
 
-  run -> Fill();
-
+  // Gets the number of the event and passes it to the RunManager
   G4int evtNb = event -> GetEventID();
+  run -> Fill( evtNb );
+
   if ( evtNb % fPrintModule == 0 ) {
 
     G4cout << std::setfill( '-' ) << std::setw( 30 ) << G4endl;

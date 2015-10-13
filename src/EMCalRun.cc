@@ -7,14 +7,19 @@
 EMCalRun::EMCalRun() :
   G4Run(),
   fOutputTree( 0 ),
-  fVariablesVector( 0 ),
-  fTitle( "DetectorEnergy/D:SGVolumeEnergy/D:LostEnergy/D" ) {
+  fTitle( "DetectorEnergy/D:SGVolumeEnergy/D:LostEnergy/D" ),
+  fDetectorEnergy( 0 ),
+  fLostEnergy( 0 ),
+  fNhits( 0 ),
+  fSGVolumeEnergy( 0 ),
+  fTrueEnergy( 0 ),
+  fVariablesVector( 0 ) {
 
   const EMCalDetectorConstruction *detector
    = static_cast<const EMCalDetectorConstruction*>
      ( G4RunManager::GetRunManager() -> GetUserDetectorConstruction() );
 
-  fNbranches       = detector -> GetNmodules() + 1;
+  fNbranches       = detector -> GetNmodules();
   fVariablesVector = new EMCalRun::PhysicalVariables[ fNbranches ];
 } 
 
@@ -37,7 +42,7 @@ void EMCalRun::AddEnergyToSGVolume( G4double edep,
   fVariablesVector[ idet ].SGVolumeEnergy += edep;
 }
  
-void EMCalRun::Fill() {
+void EMCalRun::Fill( const G4int &evtNb ) {
 
   // Obtains the pointer to the particle gun
   const EMCalPrimaryGeneratorAction* generatorAction
@@ -47,31 +52,41 @@ void EMCalRun::Fill() {
   const G4ParticleGun* particleGun = generatorAction -> GetParticleGun();
 
   // Gets the energy of the incident particle
-  G4double
-    particleEnergy = particleGun -> GetParticleEnergy(),
-    detectorEnergy,
-    sgvolumeEnergy,
-    totalDetectorEnergy = 0,
-    totalSGVolumeEnergy = 0;
-  
-  for ( size_t idet = 1; idet < fNbranches; idet++ ) {
+  fDetectorEnergy = 0;
+  fLostEnergy     = 0;
+  fNhits          = 0;
+  fSGVolumeEnergy = 0;
+  fTrueEnergy     = particleGun -> GetParticleEnergy();
 
-    detectorEnergy = fVariablesVector[ idet ].DetectorEnergy;
-    sgvolumeEnergy = fVariablesVector[ idet ].SGVolumeEnergy;
+  // Gets the energy deposited in each module
+  G4double ModDetectorEnergy, ModSGVolumeEnergy;
+  
+  for ( size_t idet = 0; idet < fNbranches; idet++ ) {
+
+    ModDetectorEnergy = fVariablesVector[ idet ].DetectorEnergy;
+    ModSGVolumeEnergy = fVariablesVector[ idet ].SGVolumeEnergy;
 
     fVariablesVector[ idet ].LostEnergy
-      = particleEnergy - detectorEnergy - sgvolumeEnergy;
+      = fTrueEnergy - ModDetectorEnergy - ModSGVolumeEnergy;
 
-    totalDetectorEnergy += detectorEnergy;
-    totalSGVolumeEnergy += sgvolumeEnergy;
+    fDetectorEnergy += ModDetectorEnergy;
+    fSGVolumeEnergy += ModSGVolumeEnergy;
+
+    if ( ModDetectorEnergy > 0. )
+      fNhits++;
   }
 
-  fVariablesVector[ 0 ].DetectorEnergy = totalDetectorEnergy;
-  fVariablesVector[ 0 ].SGVolumeEnergy = totalSGVolumeEnergy;
-  fVariablesVector[ 0 ].LostEnergy
-    = particleEnergy - totalDetectorEnergy - totalSGVolumeEnergy;
+  fLostEnergy = fTrueEnergy - fDetectorEnergy;
 
   fOutputTree -> Fill();
+
+  if ( evtNb % 100000 == 0 ) {
+
+    G4cout << "\n ******************************* "   << G4endl;
+    G4cout <<   " **** Autosaving output tree *** "   << G4endl;
+    G4cout <<   " ******************************* \n" << G4endl;
+    fOutputTree -> AutoSave();
+  }
 }
 
 void EMCalRun::Reset() {

@@ -56,14 +56,20 @@ void EMCalRunAction::BeginOfRunAction( const G4Run* ) {
 
   std::vector<EMCalModule*> marray = detector -> GetModuleArray();
 
-  // Sets the branch for the global detector ( situated on top of the tree )
-  fOutputTree -> Branch( "Calorimeter", fRun -> GetPathTo( 0 ), fRun -> Title() );
+  // Sets the branches for the variables of the complete detector
+  fOutputTree -> Branch( "DetectorEnergy", fRun -> DetectorEnergyPath(), "DetectorEnergy/D" );
+  fOutputTree -> Branch( "nHits"         , fRun -> nHitsPath()         , "nHits/I"          );
+  fOutputTree -> Branch( "SGVolumeEnergy", fRun -> SGVolumeEnergyPath(), "SGVolumeEnergy/D" );
+  fOutputTree -> Branch( "LostEnergy"    , fRun -> LostEnergyPath()    , "LostEnergy/D"     );
+  fOutputTree -> Branch( "TrueEnergy"    , fRun -> TrueEnergyPath()    , "TrueEnergy/D"     );
 
-  // Sets the branches for each of the modules
-  for ( unsigned int idet = 0; idet < marray.size(); idet++ )
-    fOutputTree -> Branch( ( marray[ idet ] -> GetID() ).data(),
-			   fRun -> GetPathTo( idet + 1 ),
-    			   fRun -> Title() );
+  // Sets the branches for each of the modules. If there is only one module the branches are
+  // not created.
+  if ( marray.size() > 1 )
+    for ( size_t idet = 0; idet < marray.size(); idet++ )
+      fOutputTree -> Branch( ( marray[ idet ] -> GetID() ).data(),
+			     fRun -> GetPathTo( idet ),
+			     fRun -> Title() );
 
   // Informs the runManager to save random number seed
   G4RunManager::GetRunManager() -> SetRandomNumberStore( false );
@@ -71,6 +77,7 @@ void EMCalRunAction::BeginOfRunAction( const G4Run* ) {
 
 void EMCalRunAction::EndOfRunAction( const G4Run *run ) {
 
+  // Gets the number of the event. If zero it returns.
   G4int nofEvents = run -> GetNumberOfEvent();
   if ( nofEvents == 0 ) return;
   

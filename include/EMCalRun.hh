@@ -34,18 +34,30 @@ public:
 						 G4int    idet );
   void                      AddEnergyToSGVolume( G4double edep,
 						 G4int    idet );
-  void                      Fill();
+  void                      Fill( const G4int &evtNb );
   inline size_t             GetNbranches() const;
   inline PhysicalVariables* GetPathTo( size_t index );
   void                      Reset();
   inline void               SetOutputTree( TTree *tree );
+  inline G4double*          DetectorEnergyPath();
+  inline G4double*          LostEnergyPath();
+  inline G4int*             nHitsPath();
+  inline G4double*          TrueEnergyPath();
+  inline G4double*          SGVolumeEnergyPath();
   inline const char*        Title();
 
 private:
   size_t             fNbranches;
   TTree             *fOutputTree;
-  PhysicalVariables *fVariablesVector;
   const char        *fTitle;
+
+  // Variables of the complete calorimeter
+  G4double           fDetectorEnergy;
+  G4double           fLostEnergy;
+  G4int              fNhits;
+  G4double           fSGVolumeEnergy;
+  G4double           fTrueEnergy;
+  PhysicalVariables *fVariablesVector;
 
 };
 
@@ -58,6 +70,12 @@ inline EMCalRun::PhysicalVariables* EMCalRun::GetPathTo( size_t index ) {
 inline void EMCalRun::SetOutputTree( TTree *tree ) { fOutputTree = tree; }
 
 inline const char* EMCalRun::Title() { return fTitle; }
+
+inline G4double* EMCalRun::DetectorEnergyPath() { return &fDetectorEnergy; }
+inline G4double* EMCalRun::LostEnergyPath() { return &fLostEnergy; }
+inline G4int*    EMCalRun::nHitsPath() { return &fNhits; }
+inline G4double* EMCalRun::SGVolumeEnergyPath() { return &fSGVolumeEnergy; }
+inline G4double* EMCalRun::TrueEnergyPath() { return &fTrueEnergy; }
 
 #endif
 
