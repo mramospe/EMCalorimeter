@@ -5,7 +5,7 @@ EMCalEventActionMessenger( EMCalEventAction *eventAction ) :
   fEventAction( eventAction ) {
 
   fEventDir
-    = new G4UIdirectory( "/EMCal/event" );
+    = new G4UIdirectory( "/EMCal/event/" );
   fEventDir -> SetGuidance( "Event control" );
 
   fPrintModuleCmd

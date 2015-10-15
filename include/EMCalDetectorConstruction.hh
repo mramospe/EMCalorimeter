@@ -25,10 +25,10 @@ public:
 
   // Main methods
   virtual G4VPhysicalVolume*            Construct();
-  inline std::vector<G4LogicalVolume*>  GetDetectorArray() const;
+  inline const G4LogicalVolume*         GetDetector( G4int idet ) const;
+  inline const G4LogicalVolume*         GetSGVolume( G4int idet ) const;
   inline std::vector<EMCalModule*>      GetModuleArray() const;
   inline unsigned int                   GetNmodules() const;
-  inline std::vector<G4LogicalVolume*>  GetSGVolumeArray() const;
 
   // Messenger methods
   void        DefineMaterials();
@@ -75,10 +75,13 @@ protected:
 
 };
 
-// Returns the detector volume
-inline std::vector<G4LogicalVolume*> 
-EMCalDetectorConstruction::GetDetectorArray() const {
-  return fDetectorArray;
+inline const G4LogicalVolume*
+EMCalDetectorConstruction::GetDetector( G4int idet ) const {
+  return fDetectorArray.at( idet );
+}
+inline const G4LogicalVolume*
+EMCalDetectorConstruction::GetSGVolume( G4int isgv ) const {
+  return fSGVolumeArray.at( isgv );
 }
 // Returns the array of modules
 inline std::vector<EMCalModule*>
@@ -90,12 +93,6 @@ inline unsigned int
 EMCalDetectorConstruction::GetNmodules() const {
   return fModuleArray.size();
 }
-// Returns the pre-shower volume
-inline std::vector<G4LogicalVolume*> 
-EMCalDetectorConstruction::GetSGVolumeArray() const {
-  return fSGVolumeArray;
-}
-
 
 
 // Prints the parameters of the detector

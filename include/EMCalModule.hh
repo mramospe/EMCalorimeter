@@ -78,9 +78,9 @@ inline G4Box* EMCalModule::GetSolidSGVolume() { return fSolidSGVolume; }
 // Sets the placement of the detector
 inline void
 EMCalModule::SetDetectorPlacement( G4RotationMatrix *rotation,
-					       G4ThreeVector     place,
-					       G4LogicalVolume  *logicalWorld,
-					       G4bool           &checkOverlaps ) {
+				   G4ThreeVector     place,
+				   G4LogicalVolume  *logicalWorld,
+				   G4bool           &checkOverlaps ) {
 
   new G4PVPlacement( rotation,
 		     place,
@@ -94,9 +94,9 @@ EMCalModule::SetDetectorPlacement( G4RotationMatrix *rotation,
 // Sets the placement of the shower-generator-volume
 inline void
 EMCalModule::SetSGVolumePlacement( G4RotationMatrix *rotation,
-					       G4ThreeVector     place,
-					       G4LogicalVolume  *logicalWorld,
-					       G4bool           &checkOverlaps ) {
+				   G4ThreeVector     place,
+				   G4LogicalVolume  *logicalWorld,
+				   G4bool           &checkOverlaps ) {
 
   new G4PVPlacement( rotation,
 		     place,

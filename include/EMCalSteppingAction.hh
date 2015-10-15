@@ -23,8 +23,6 @@ public:
 
 private:
   EMCalEventAction              *fEventAction;
-  std::vector<G4LogicalVolume*>  fDetectorArray;
-  std::vector<G4LogicalVolume*>  fSGVolumeArray;
 };
 
 #endif

@@ -19,10 +19,6 @@ void EMCalSteppingAction::UserSteppingAction( const G4Step* step ) {
     = static_cast<const EMCalDetectorConstruction*>
     ( G4RunManager::GetRunManager() -> GetUserDetectorConstruction() );
 
-  // Checks if the arrays are defined
-  if ( !fDetectorArray.size() ) { fDetectorArray = detector -> GetDetectorArray(); }
-  if ( !fSGVolumeArray.size() ) { fSGVolumeArray = detector -> GetSGVolumeArray(); }
-
   // Gets the volume associated with the current step
   G4LogicalVolume *volume 
     = step -> GetPreStepPoint() -> GetTouchableHandle()
@@ -42,34 +38,26 @@ void EMCalSteppingAction::UserSteppingAction( const G4Step* step ) {
     insgvolume = false;
   G4double edepStep;
 
-  // If volume is a detector last option is true
   imod = 0;
   while ( imod < size && !indetector ) {
-
-    if ( volume == fDetectorArray[ imod ] ) indetector = true;
-
+    if ( volume == detector -> GetDetector( imod ) ) indetector = true;
     imod++;
   }
   if ( indetector ) {
     edepStep = step -> GetTotalEnergyDeposit();
-    run -> AddEnergyToDetector( edepStep, imod );
-    return;
+    // Because of the < while > loop < imod > is one unit greater
+    run -> AddEnergyToDetector( edepStep, imod - 1 );
   }
-
-  // If volume is a SGV last option is false
-  imod = 0;
-  while ( imod < size && !insgvolume ) {
-
-    if ( volume == fSGVolumeArray[ imod ] ) insgvolume = true;
-
-    imod++;
+  else {
+    imod = 0;
+    while ( imod < size && !insgvolume ) {
+      if ( volume == detector -> GetSGVolume( imod ) ) insgvolume = true;
+      imod++;
+    }
+    if ( insgvolume ) {
+      edepStep = step -> GetTotalEnergyDeposit();
+      // Because of the < while > loop < imod > is one unit greater
+      run -> AddEnergyToSGVolume( edepStep, imod - 1 );
+    }
   }
-  if ( insgvolume ) {
-    edepStep = step -> GetTotalEnergyDeposit();
-    run -> AddEnergyToSGVolume( edepStep, imod );
-    return;
-  }
-
-  // Otherwise it does nothing
-  return;
 }

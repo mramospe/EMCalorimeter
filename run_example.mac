@@ -18,8 +18,8 @@
 /EMCal/detector/setSGVolumeMaterial Iron
 #
 # Sets the number of modules in each direction
-/EMCal/detector/setNxModules 1
-/EMCal/detector/setNyModules 1
+/EMCal/detector/setNxModules 3
+/EMCal/detector/setNyModules 3
 /EMCal/detector/setNzModules 1
 #
 # Sets the dimensions of the world
@@ -59,4 +59,4 @@
 /EMCal/emission/energy/setSigma 5  MeV
 #
 # Initializes the run
-/run/beamOn 1000000
+/run/beamOn 10000

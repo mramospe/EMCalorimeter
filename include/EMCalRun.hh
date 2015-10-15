@@ -24,15 +24,16 @@ public:
 
     G4double DetectorEnergy;
     G4double SGVolumeEnergy;
-    G4double LostEnergy;
+    G4int    nDetInteractions;
+    G4int    nSgvInteractions;
   };
 
   // ----------------------
 
   // Methods
-  void                      AddEnergyToDetector( G4double edep,
+  inline void               AddEnergyToDetector( G4double edep,
 						 G4int    idet );
-  void                      AddEnergyToSGVolume( G4double edep,
+  inline void               AddEnergyToSGVolume( G4double edep,
 						 G4int    idet );
   void                      Fill( const G4int &evtNb );
   inline size_t             GetNbranches() const;
@@ -41,7 +42,8 @@ public:
   inline void               SetOutputTree( TTree *tree );
   inline G4double*          DetectorEnergyPath();
   inline G4double*          LostEnergyPath();
-  inline G4int*             nHitsPath();
+  inline G4int*             nDetHitsPath();
+  inline G4int*             nSgvHitsPath();
   inline G4double*          TrueEnergyPath();
   inline G4double*          SGVolumeEnergyPath();
   inline const char*        Title();
@@ -54,28 +56,36 @@ private:
   // Variables of the complete calorimeter
   G4double           fDetectorEnergy;
   G4double           fLostEnergy;
-  G4int              fNhits;
+  G4int              fNdetHits;
+  G4int              fNsgvHits;
   G4double           fSGVolumeEnergy;
   G4double           fTrueEnergy;
   PhysicalVariables *fVariablesVector;
 
 };
 
+inline void EMCalRun::AddEnergyToDetector( G4double edep,
+					   G4int    idet ) {
+  fVariablesVector[ idet ].DetectorEnergy += edep;
+  fVariablesVector[ idet ].nDetInteractions++;
+}
+inline void EMCalRun::AddEnergyToSGVolume( G4double edep,
+					   G4int    idet ) {
+  fVariablesVector[ idet ].SGVolumeEnergy += edep;
+  fVariablesVector[ idet ].nSgvInteractions++;
+}
 inline size_t EMCalRun::GetNbranches() const { return fNbranches; }
-
 inline EMCalRun::PhysicalVariables* EMCalRun::GetPathTo( size_t index ) {
   return fVariablesVector + index;
 }
-
-inline void EMCalRun::SetOutputTree( TTree *tree ) { fOutputTree = tree; }
-
-inline const char* EMCalRun::Title() { return fTitle; }
-
-inline G4double* EMCalRun::DetectorEnergyPath() { return &fDetectorEnergy; }
-inline G4double* EMCalRun::LostEnergyPath() { return &fLostEnergy; }
-inline G4int*    EMCalRun::nHitsPath() { return &fNhits; }
-inline G4double* EMCalRun::SGVolumeEnergyPath() { return &fSGVolumeEnergy; }
-inline G4double* EMCalRun::TrueEnergyPath() { return &fTrueEnergy; }
+inline void        EMCalRun::SetOutputTree( TTree *tree ) { fOutputTree = tree; }
+inline const char* EMCalRun::Title()                      { return fTitle; }
+inline G4double*   EMCalRun::DetectorEnergyPath()         { return &fDetectorEnergy; }
+inline G4double*   EMCalRun::LostEnergyPath()             { return &fLostEnergy; }
+inline G4int*      EMCalRun::nDetHitsPath()               { return &fNdetHits; }
+inline G4int*      EMCalRun::nSgvHitsPath()               { return &fNsgvHits; }
+inline G4double*   EMCalRun::SGVolumeEnergyPath()         { return &fSGVolumeEnergy; }
+inline G4double*   EMCalRun::TrueEnergyPath()             { return &fTrueEnergy; }
 
 #endif
 

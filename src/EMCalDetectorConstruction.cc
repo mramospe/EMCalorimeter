@@ -1,5 +1,6 @@
 #include "EMCalDetectorConstruction.hh"
 #include "EMCalDetectorMessenger.hh"
+#include "EMCalSteppingAction.hh"
 
 #include "G4NistManager.hh"
 #include "G4Box.hh"
@@ -66,11 +67,14 @@ EMCalDetectorConstruction::~EMCalDetectorConstruction() {
 // Constructs the detector
 G4VPhysicalVolume* EMCalDetectorConstruction::Construct() {
 
-  // If the modules are defined they are deleted
+  // If the modules are defined they are deleted. Since G4LogicalVolume can not be destroyed,
+  // because are owned by the RunManager, the SGVolume and Detector arrays are reinitialised.
+  fDetectorArray = std::vector<G4LogicalVolume*>();
+  fSGVolumeArray = std::vector<G4LogicalVolume*>();
   fModuleArray.clear();
 
   // Get nist material manager
-  G4NistManager* nist = G4NistManager::Instance();
+  G4NistManager *nist = G4NistManager::Instance();
 
   // Activates checking for overlaps
   bool checkOverlaps = true;
@@ -320,20 +324,20 @@ void EMCalDetectorConstruction::DefineMaterials() {
   BGO -> AddElement( Ge, natoms = 3 );
   BGO -> AddElement( Bi, natoms = 4 );  
   
-  G4Material *SodiumIodine = 
+  G4Material *SodiumIodide = 
     new G4Material( "NaI", density = 3.67*g/cm3, ncomponents = 2 );
-  SodiumIodine -> AddElement( Na , natoms = 1 );
-  SodiumIodine -> AddElement( I , natoms = 1 );
+  SodiumIodide -> AddElement( Na , natoms = 1 );
+  SodiumIodide -> AddElement( I , natoms = 1 );
 
   G4Material *BariumFluoride = 
     new G4Material( "BaF", density = 4.89*g/cm3, ncomponents = 2 );
   BariumFluoride -> AddElement( Ba , natoms = 1 );
   BariumFluoride -> AddElement( F , natoms = 2 );
 
-  G4Material * CesiumIodine= 
+  G4Material * CesiumIodide= 
     new G4Material( "CsI", density = 4.51*g/cm3, ncomponents = 2 );
-  CesiumIodine -> AddElement( Cs, natoms = 1 );
-  CesiumIodine -> AddElement( I, natoms = 1 );
+  CesiumIodide -> AddElement( Cs, natoms = 1 );
+  CesiumIodide -> AddElement( I, natoms = 1 );
   
   G4Material *CeriumFluoride = 
     new G4Material( "CeF3", density = 6.16*g/cm3, ncomponents = 2 );

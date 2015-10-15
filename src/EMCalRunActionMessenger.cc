@@ -3,7 +3,7 @@
 EMCalRunActionMessenger::EMCalRunActionMessenger( EMCalRunAction *run ) :
   fRunAction( run ) {
 
-  fRunDir = new G4UIdirectory( "/EMCal/run" );
+  fRunDir = new G4UIdirectory( "/EMCal/run/" );
   fRunDir -> SetGuidance( "Run control" );
 
   fOutputFileNameCmd

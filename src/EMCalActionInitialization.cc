@@ -24,6 +24,6 @@ void EMCalActionInitialization::Build() const
   
   EMCalEventAction* eventAction = new EMCalEventAction;
   SetUserAction(eventAction);
-  
+
   SetUserAction(new EMCalSteppingAction(eventAction));
 }

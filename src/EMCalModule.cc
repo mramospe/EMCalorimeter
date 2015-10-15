@@ -10,10 +10,10 @@ EMCalModule::EMCalModule( const G4String &name ) :
 EMCalModule::~EMCalModule() { }
 
 void EMCalModule::ConfigureDetector( const G4String &name,
-						 G4double        halflengthX,
-						 G4double        halflengthY,
-						 G4double        halflengthZ,
-						 G4Material     *material ) {
+				     G4double        halflengthX,
+				     G4double        halflengthY,
+				     G4double        halflengthZ,
+				     G4Material     *material ) {
 
   fSolidDetector = new G4Box( name,
 			      halflengthX,
@@ -26,10 +26,10 @@ void EMCalModule::ConfigureDetector( const G4String &name,
 }
 
 void EMCalModule::ConfigureSGVolume( const G4String &name,
-						 G4double        halflengthX,
-						 G4double        halflengthY,
-						 G4double        halflengthZ,
-						 G4Material     *material ) {
+				     G4double        halflengthX,
+				     G4double        halflengthY,
+				     G4double        halflengthZ,
+				     G4Material     *material ) {
 
   fSolidSGVolume = new G4Box( name,
 			      halflengthX,

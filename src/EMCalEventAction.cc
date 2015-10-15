@@ -22,7 +22,6 @@ void EMCalEventAction::BeginOfEventAction( const G4Event* ) {
   EMCalRun *run 
     = static_cast<EMCalRun*>( G4RunManager::GetRunManager() -> 
 			      GetNonConstCurrentRun() );
-
   run -> Reset();
 }
 
@@ -33,7 +32,7 @@ void EMCalEventAction::EndOfEventAction( const G4Event *event ) {
     = static_cast<EMCalRun*>( G4RunManager::GetRunManager() -> 
 			      GetNonConstCurrentRun() );
 
-  // Gets the number of the event and passes it to the RunManager
+  // Gets the number of the event and passes it to the EMCalRun class
   G4int evtNb = event -> GetEventID();
   run -> Fill( evtNb );
 

@@ -54,17 +54,17 @@ void EMCalRunAction::BeginOfRunAction( const G4Run* ) {
     static_cast<const EMCalDetectorConstruction*>
     ( G4RunManager::GetRunManager() -> GetUserDetectorConstruction() );
 
-  std::vector<EMCalModule*> marray = detector -> GetModuleArray();
-
   // Sets the branches for the variables of the complete detector
   fOutputTree -> Branch( "DetectorEnergy", fRun -> DetectorEnergyPath(), "DetectorEnergy/D" );
-  fOutputTree -> Branch( "nHits"         , fRun -> nHitsPath()         , "nHits/I"          );
   fOutputTree -> Branch( "SGVolumeEnergy", fRun -> SGVolumeEnergyPath(), "SGVolumeEnergy/D" );
   fOutputTree -> Branch( "LostEnergy"    , fRun -> LostEnergyPath()    , "LostEnergy/D"     );
   fOutputTree -> Branch( "TrueEnergy"    , fRun -> TrueEnergyPath()    , "TrueEnergy/D"     );
+  fOutputTree -> Branch( "nDetHits"      , fRun -> nDetHitsPath()      , "nDetHits/I"       );
+  fOutputTree -> Branch( "nSgvHits"      , fRun -> nSgvHitsPath()      , "nSgvHits/I"       );
 
   // Sets the branches for each of the modules. If there is only one module the branches are
   // not created.
+  std::vector<EMCalModule*> marray = detector -> GetModuleArray();
   if ( marray.size() > 1 )
     for ( size_t idet = 0; idet < marray.size(); idet++ )
       fOutputTree -> Branch( ( marray[ idet ] -> GetID() ).data(),
@@ -96,30 +96,6 @@ void EMCalRunAction::EndOfRunAction( const G4Run *run ) {
     runCondition += " of ";
     runCondition += G4BestUnit( particleEnergy, "Energy" );
   }
-        
-  // Print
-  /*
-    if ( IsMaster() ) {
-    G4cout
-    << G4endl
-    << "--------------------End of Global Run-----------------------";
-    }
-    else {
-    G4cout
-    << G4endl
-    << "--------------------End of Local Run------------------------";
-    }
   
-    G4cout
-    << G4endl
-    << " The run consists of " << nofEvents << " "<< runCondition
-    << G4endl
-    << " Energy in scoring volume : " 
-    << G4BestUnit( edep, "Energy" )
-    << G4endl
-    << "------------------------------------------------------------"
-    << G4endl
-    << G4endl;
-  */
   fOutputTree -> AutoSave();
 }

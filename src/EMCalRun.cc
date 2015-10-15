@@ -7,10 +7,11 @@
 EMCalRun::EMCalRun() :
   G4Run(),
   fOutputTree( 0 ),
-  fTitle( "DetectorEnergy/D:SGVolumeEnergy/D:LostEnergy/D" ),
+  fTitle( "DetectorEnergy/D:SGVolumeEnergy/D:nDetInteractions/I:nSgvInteractions/I" ),
   fDetectorEnergy( 0 ),
   fLostEnergy( 0 ),
-  fNhits( 0 ),
+  fNdetHits( 0 ),
+  fNsgvHits( 0 ),
   fSGVolumeEnergy( 0 ),
   fTrueEnergy( 0 ),
   fVariablesVector( 0 ) {
@@ -26,21 +27,9 @@ EMCalRun::EMCalRun() :
 EMCalRun::~EMCalRun() { delete[] fVariablesVector; }
 
 EMCalRun::PhysicalVariables::PhysicalVariables() :
-  DetectorEnergy( 0 ), SGVolumeEnergy( 0 ), LostEnergy( 0 ) { }
+  DetectorEnergy( 0 ), SGVolumeEnergy( 0 ), nDetInteractions( 0 ), nSgvInteractions( 0 ) { }
 
 EMCalRun::PhysicalVariables::~PhysicalVariables() { }
-
-void EMCalRun::AddEnergyToDetector( G4double edep,
-				    G4int    idet ) {
-
-  fVariablesVector[ idet ].DetectorEnergy += edep;
-}
-
-void EMCalRun::AddEnergyToSGVolume( G4double edep,
-				    G4int    idet ) {
-
-  fVariablesVector[ idet ].SGVolumeEnergy += edep;
-}
  
 void EMCalRun::Fill( const G4int &evtNb ) {
 
@@ -54,7 +43,8 @@ void EMCalRun::Fill( const G4int &evtNb ) {
   // Gets the energy of the incident particle
   fDetectorEnergy = 0;
   fLostEnergy     = 0;
-  fNhits          = 0;
+  fNdetHits       = 0;
+  fNsgvHits       = 0;
   fSGVolumeEnergy = 0;
   fTrueEnergy     = particleGun -> GetParticleEnergy();
 
@@ -66,16 +56,14 @@ void EMCalRun::Fill( const G4int &evtNb ) {
     ModDetectorEnergy = fVariablesVector[ idet ].DetectorEnergy;
     ModSGVolumeEnergy = fVariablesVector[ idet ].SGVolumeEnergy;
 
-    fVariablesVector[ idet ].LostEnergy
-      = fTrueEnergy - ModDetectorEnergy - ModSGVolumeEnergy;
-
     fDetectorEnergy += ModDetectorEnergy;
     fSGVolumeEnergy += ModSGVolumeEnergy;
 
     if ( ModDetectorEnergy > 0. )
-      fNhits++;
+      fNdetHits++;
+    if ( ModSGVolumeEnergy > 0. )
+      fNsgvHits++;
   }
-
   fLostEnergy = fTrueEnergy - fDetectorEnergy;
 
   fOutputTree -> Fill();
@@ -93,8 +81,9 @@ void EMCalRun::Reset() {
 
     for ( size_t idet = 0; idet < fNbranches; idet++ ) {
 
-      fVariablesVector[ idet ].DetectorEnergy  = 0;
-      fVariablesVector[ idet ].SGVolumeEnergy  = 0;
-      fVariablesVector[ idet ].LostEnergy      = 0;
+      fVariablesVector[ idet ].DetectorEnergy   = 0;
+      fVariablesVector[ idet ].SGVolumeEnergy   = 0;
+      fVariablesVector[ idet ].nDetInteractions = 0;
+      fVariablesVector[ idet ].nSgvInteractions = 0;
     }
 }
