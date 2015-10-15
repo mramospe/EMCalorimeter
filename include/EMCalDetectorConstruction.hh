@@ -28,7 +28,8 @@ public:
   inline const G4LogicalVolume*         GetDetector( G4int idet ) const;
   inline const G4LogicalVolume*         GetSGVolume( G4int idet ) const;
   inline std::vector<EMCalModule*>      GetModuleArray() const;
-  inline unsigned int                   GetNmodules() const;
+  inline size_t                         GetNmodules() const;
+  inline G4bool                         SGVenabled() const;
 
   // Messenger methods
   void        DefineMaterials();
@@ -42,6 +43,7 @@ public:
   inline void SetNxModules( G4int nmodules );
   inline void SetNyModules( G4int nmodules );
   inline void SetNzModules( G4int nmodules );
+  inline void SetSGVolume( G4bool dec );
   inline void SetSGVolumeMaterial( G4String material );
   inline void SetWorldHalfLengthX( G4double hlength );
   inline void SetWorldHalfLengthY( G4double hlength );
@@ -67,6 +69,7 @@ protected:
   G4int    fNxModules;
   G4int    fNyModules;
   G4int    fNzModules;
+  G4bool   fSGVolume;
   G4String fSGVolumeMaterial;
   G4String fWorldMaterial;
   G4double fWorldHalfLengthX;
@@ -89,9 +92,14 @@ EMCalDetectorConstruction::GetModuleArray() const {
   return fModuleArray;
 }
 // Returns the number of modules
-inline unsigned int
+inline size_t
 EMCalDetectorConstruction::GetNmodules() const {
   return fModuleArray.size();
+}
+// Tells if the sgv is enabled
+inline G4bool
+EMCalDetectorConstruction::SGVenabled() const {
+  return fSGVolume;
 }
 
 
@@ -134,6 +142,9 @@ inline void EMCalDetectorConstruction::SetNyModules( G4int nmodules ) {
 }
 inline void EMCalDetectorConstruction::SetNzModules( G4int nmodules ) {
   fNzModules = nmodules;
+}
+inline void EMCalDetectorConstruction::SetSGVolume( G4bool dec ) {
+  fSGVolume = dec;
 }
 inline void EMCalDetectorConstruction::SetSGVolumeMaterial( G4String material ) {
   fSGVolumeMaterial = material;

@@ -48,7 +48,7 @@ void EMCalSteppingAction::UserSteppingAction( const G4Step* step ) {
     // Because of the < while > loop < imod > is one unit greater
     run -> AddEnergyToDetector( edepStep, imod - 1 );
   }
-  else {
+  else if ( detector -> SGVenabled() ) {
     imod = 0;
     while ( imod < size && !insgvolume ) {
       if ( volume == detector -> GetSGVolume( imod ) ) insgvolume = true;

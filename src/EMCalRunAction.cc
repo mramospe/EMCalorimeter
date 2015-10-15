@@ -54,13 +54,21 @@ void EMCalRunAction::BeginOfRunAction( const G4Run* ) {
     static_cast<const EMCalDetectorConstruction*>
     ( G4RunManager::GetRunManager() -> GetUserDetectorConstruction() );
 
-  // Sets the branches for the variables of the complete detector
-  fOutputTree -> Branch( "DetectorEnergy", fRun -> DetectorEnergyPath(), "DetectorEnergy/D" );
-  fOutputTree -> Branch( "SGVolumeEnergy", fRun -> SGVolumeEnergyPath(), "SGVolumeEnergy/D" );
-  fOutputTree -> Branch( "LostEnergy"    , fRun -> LostEnergyPath()    , "LostEnergy/D"     );
-  fOutputTree -> Branch( "TrueEnergy"    , fRun -> TrueEnergyPath()    , "TrueEnergy/D"     );
-  fOutputTree -> Branch( "nDetHits"      , fRun -> nDetHitsPath()      , "nDetHits/I"       );
-  fOutputTree -> Branch( "nSgvHits"      , fRun -> nSgvHitsPath()      , "nSgvHits/I"       );
+  // Sets the branches for the variables of the complete detector.
+  if ( detector -> SGVenabled() ) {
+    fOutputTree -> Branch( "DetectorEnergy", fRun -> DetectorEnergyPath(), "DetectorEnergy/D" );
+    fOutputTree -> Branch( "SGVolumeEnergy", fRun -> SGVolumeEnergyPath(), "SGVolumeEnergy/D" );
+    fOutputTree -> Branch( "LostEnergy"    , fRun -> LostEnergyPath()    , "LostEnergy/D"     );
+    fOutputTree -> Branch( "TrueEnergy"    , fRun -> TrueEnergyPath()    , "TrueEnergy/D"     );
+    fOutputTree -> Branch( "nDetHits"      , fRun -> nDetHitsPath()      , "nDetHits/I"       );
+    fOutputTree -> Branch( "nSgvHits"      , fRun -> nSgvHitsPath()      , "nSgvHits/I"       );
+  }
+  else {
+    fOutputTree -> Branch( "DetectorEnergy", fRun -> DetectorEnergyPath(), "DetectorEnergy/D" );
+    fOutputTree -> Branch( "LostEnergy"    , fRun -> LostEnergyPath()    , "LostEnergy/D"     );
+    fOutputTree -> Branch( "TrueEnergy"    , fRun -> TrueEnergyPath()    , "TrueEnergy/D"     );
+    fOutputTree -> Branch( "nDetHits"      , fRun -> nDetHitsPath()      , "nDetHits/I"       );
+  }
 
   // Sets the branches for each of the modules. If there is only one module the branches are
   // not created.
@@ -80,22 +88,11 @@ void EMCalRunAction::EndOfRunAction( const G4Run *run ) {
   // Gets the number of the event. If zero it returns.
   G4int nofEvents = run -> GetNumberOfEvent();
   if ( nofEvents == 0 ) return;
-  
-  // Run conditions
-  const EMCalPrimaryGeneratorAction* generatorAction
-    = static_cast<const EMCalPrimaryGeneratorAction*>
-    ( G4RunManager::GetRunManager() -> GetUserPrimaryGeneratorAction() );
 
-  G4String runCondition;
-  if ( generatorAction ) {
+  G4cout << "  Data saved in file:\t" << fOutputFile -> GetName() << G4endl;
+  G4cout << "  Output tree:       \t" << fOutputTree -> GetName() << G4endl;
+  G4cout << "=================================================="  << G4endl;
 
-    const G4ParticleGun* particleGun    = generatorAction -> GetParticleGun();
-    G4double             particleEnergy = particleGun -> GetParticleEnergy();
-
-    runCondition += particleGun -> GetParticleDefinition() -> GetParticleName();
-    runCondition += " of ";
-    runCondition += G4BestUnit( particleEnergy, "Energy" );
-  }
-  
+  // Autosaves the output tree
   fOutputTree -> AutoSave();
 }

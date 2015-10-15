@@ -46,6 +46,9 @@ EMCalDetectorConstruction::EMCalDetectorConstruction() :
   // Distance from the source to the detector
   fDistance = 7*m;
 
+  // Enables by default the shower-generator volume
+  fSGVolume = true;
+
   // Proportion detector_width/complete_width
   fModuleProportion = 1*m/( 1*m + 5*cm );
 
@@ -70,7 +73,8 @@ G4VPhysicalVolume* EMCalDetectorConstruction::Construct() {
   // If the modules are defined they are deleted. Since G4LogicalVolume can not be destroyed,
   // because are owned by the RunManager, the SGVolume and Detector arrays are reinitialised.
   fDetectorArray = std::vector<G4LogicalVolume*>();
-  fSGVolumeArray = std::vector<G4LogicalVolume*>();
+  if ( fSGVolume )
+    fSGVolumeArray = std::vector<G4LogicalVolume*>();
   fModuleArray.clear();
 
   // Get nist material manager
@@ -101,7 +105,7 @@ G4VPhysicalVolume* EMCalDetectorConstruction::Construct() {
 	       fWorldHalfLengthY,
 	       fWorldHalfLengthZ );
       
-  G4LogicalVolume *logicWorld =                         
+  G4LogicalVolume *logicWorld =         
     new G4LogicalVolume( solidWorld,
                          worldMaterial,
                          "World" );
@@ -126,6 +130,10 @@ G4VPhysicalVolume* EMCalDetectorConstruction::Construct() {
     sgvColor( 0.6, 0.6, 0.6, 1. );
 
   std::stringstream  modName, detName, sgvName;
+
+  // If the shower-generator volume is not enabled the proportion is set to one
+  if ( !fSGVolume )
+    fModuleProportion = 1;
 
   G4double
     detHalfLengthX = fModuleHalfLengthX/fNxModules,
@@ -162,49 +170,57 @@ G4VPhysicalVolume* EMCalDetectorConstruction::Construct() {
 	modName << ydet;
 	modName << zdet;
 
-	// Name for the detector and shower-generator-volume
-	detName.str( "" );         sgvName.str( "" );
-	detName << "Detector_";    sgvName << "SGVolume_";
-	detName << xdet;           sgvName << xdet;
-	detName << ydet;           sgvName << ydet;
-	detName << zdet;           sgvName << zdet;
-
-	detPosition.setX( xpos );  sgvPosition.setX( xpos );
-	detPosition.setY( ypos );  sgvPosition.setY( ypos );
-
 	// Creates a new module
 	module = new EMCalModule( modName.str() );
 
-	// Configures both detector and shower-generator-volume
-	module -> ConfigureSGVolume( sgvName.str(),
-				     detHalfLengthX,
-				     detHalfLengthY,
-				     sgvHalfLengthZ,
-				     sgvMaterial );
+	// Name for the detector and shower-generator-volume
+	detName.str( "" );
+	detName << "Detector_";
+	detName << xdet;
+	detName << ydet;
+	detName << zdet;
+	detPosition.setX( xpos );
+	detPosition.setY( ypos );
 
+	// Configures both detector and shower-generator-volume
 	module -> ConfigureDetector( detName.str(),
 				     detHalfLengthX,
 				     detHalfLengthY,
 				     detHalfLengthZ,
 				     detMaterial );
-
-	// Places the different parts in the world
-	module -> SetSGVolumePlacement( 0,
-					sgvPosition,
-					logicWorld,
-					checkOverlaps );
-
 	module -> SetDetectorPlacement( 0,
 					detPosition,
 					logicWorld,
 					checkOverlaps );
-
-	// Sets the visualization attributes
-	module -> SetSGVolumeVisAttributes( new G4VisAttributes( sgvColor ) );
 	module -> SetDetectorVisAttributes( new G4VisAttributes( detColor ) );
 
 	fDetectorArray.push_back( module -> GetLogicalDetector() );
-	fSGVolumeArray.push_back( module -> GetLogicalSGVolume() );
+
+	// If the shower-generator volume is enabled it is created
+	if ( fSGVolume ) {
+
+	  sgvName.str( "" );
+	  sgvName << "SGVolume_";
+	  sgvName << xdet;
+	  sgvName << ydet;
+	  sgvName << zdet;
+	  sgvPosition.setX( xpos );
+	  sgvPosition.setY( ypos );
+
+	  module -> ConfigureSGVolume( sgvName.str(),
+				       detHalfLengthX,
+				       detHalfLengthY,
+				       sgvHalfLengthZ,
+				       sgvMaterial );
+
+	  module -> SetSGVolumePlacement( 0,
+					  sgvPosition,
+					  logicWorld,
+					  checkOverlaps );
+	  module -> SetSGVolumeVisAttributes( new G4VisAttributes( sgvColor ) );
+
+	  fSGVolumeArray.push_back( module -> GetLogicalSGVolume() );
+	}
 
 	fModuleArray.push_back( module );
       }

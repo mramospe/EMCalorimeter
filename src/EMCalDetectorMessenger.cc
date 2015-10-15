@@ -78,6 +78,12 @@ EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) :
   fPrintCmd -> SetGuidance("Prints geometry");
   fPrintCmd -> AvailableForStates( G4State_Idle );
 
+  fSGVolumeCmd
+    = new G4UIcmdWithABool( "/EMCal/detector/SGVenabled", this );
+  fSGVolumeCmd -> SetGuidance( "Enable or disable the shower-generator volume" );
+  fSGVolumeCmd -> SetParameterName( "SGVolume", false );
+  fSGVolumeCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
+
   fSGVolumeMaterialCmd
     = new G4UIcmdWithAString( "/EMCal/detector/setSGVolumeMaterial", this );
   fSGVolumeMaterialCmd -> SetGuidance( "Select the world material" );
@@ -137,6 +143,7 @@ EMCalDetectorMessenger::~EMCalDetectorMessenger() {
   delete fNyModulesCmd;
   delete fNzModulesCmd;
   delete fPrintCmd;
+  delete fSGVolumeCmd;
   delete fSGVolumeMaterialCmd;
   delete fUpdateCmd;
   delete fWorldHalfLengthXcmd;
@@ -178,6 +185,10 @@ void EMCalDetectorMessenger::SetNewValue( G4UIcommand *command, G4String value )
 
   if ( command == fPrintCmd )
     fDetector -> PrintParameters();
+
+  if ( command == fSGVolumeCmd )
+    fDetector ->
+      SetSGVolume( fSGVolumeCmd -> GetNewBoolValue( value ) );
 
   if ( command == fSGVolumeMaterialCmd )
     fDetector -> SetSGVolumeMaterial( value );

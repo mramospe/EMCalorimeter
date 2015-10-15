@@ -38,9 +38,9 @@ void EMCalEventAction::EndOfEventAction( const G4Event *event ) {
 
   if ( evtNb % fPrintModule == 0 ) {
 
-    G4cout << std::setfill( '-' ) << std::setw( 30 ) << G4endl;
+    G4cout << " ================================================="   << G4endl;
     G4cout << " Events processed: " << evtNb << G4endl;
     CLHEP::HepRandom::showEngineStatus();
-    G4cout << std::setfill( '-' ) << std::setw( 30 ) << G4endl;
+    G4cout << " =================================================\n" << G4endl;
   }
 }

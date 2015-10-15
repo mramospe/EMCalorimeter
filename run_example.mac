@@ -12,6 +12,12 @@
 # Initialize kernel
 /run/initialize
 #
+# Number of events per print
+/EMCal/run/setPrintModule 10000
+#
+# Sets the shower-generator volume status
+/EMCal/detector/SGVenabled true
+#
 # Sets the materials
 /EMCal/detector/setWorldMaterial    Air
 /EMCal/detector/setDetectorMaterial NaI

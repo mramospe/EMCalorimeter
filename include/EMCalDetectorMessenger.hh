@@ -8,6 +8,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "globals.hh"
@@ -34,6 +35,7 @@ protected:
   G4UIcmdWithAnInteger      *fNyModulesCmd;
   G4UIcmdWithAnInteger      *fNzModulesCmd;
   G4UIcmdWithoutParameter   *fPrintCmd;
+  G4UIcmdWithABool          *fSGVolumeCmd;
   G4UIcmdWithAString        *fSGVolumeMaterialCmd;
   G4UIcmdWithoutParameter   *fUpdateCmd;
   G4UIcmdWithADoubleAndUnit *fWorldHalfLengthXcmd;
