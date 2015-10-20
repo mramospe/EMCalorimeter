@@ -20,10 +20,10 @@ EMCalBreitWignerMessenger( EMCalBreitWigner *randGen );
 void SetNewValue( G4UIcommand *command, G4String value );
 
 protected:
-EMCalBreitWigner          *fBreitWigner;
-  G4UIdirectory *fDir;
-G4UIcmdWithADoubleAndUnit *fMeanCmd;
-G4UIcmdWithADoubleAndUnit *fWidthCmd;
+  EMCalBreitWigner          *fBreitWigner;
+  G4UIdirectory             *fDir;
+  G4UIcmdWithADoubleAndUnit *fMeanCmd;
+  G4UIcmdWithADoubleAndUnit *fWidthCmd;
 };
 
 // ____________________________________________________

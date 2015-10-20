@@ -6,6 +6,7 @@
 #include "G4UImessenger.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADouble.hh"
 #include "globals.hh"
 
 class EMCalPrimaryGeneratorActionMessenger: public G4UImessenger {
@@ -22,6 +23,12 @@ protected:
   G4UIdirectory               *fEmissionDirectionDir;
   G4UIdirectory               *fEmissionEnergyDir;
   G4UIcmdWithAString          *fEnergyShapeCmd;
+  G4UIcmdWithAString          *fEmissionDirectionCmd;
+  G4UIcmdWithADouble          *fEmissionDirectionMaxPhiCmd;
+  G4UIcmdWithADouble          *fEmissionDirectionMaxThetaCmd;
+  G4UIcmdWithADouble          *fEmissionDirectionMinPhiCmd;
+  G4UIcmdWithADouble          *fEmissionDirectionMinThetaCmd;
+
 };
 
 #endif

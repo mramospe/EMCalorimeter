@@ -10,14 +10,21 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
+#include <cmath>
+
 EMCalPrimaryGeneratorAction::EMCalPrimaryGeneratorAction() :
-  G4VUserPrimaryGeneratorAction(), fParticleGun( 0 ) {
+  G4VUserPrimaryGeneratorAction(),
+  fParticleGun( 0 ),
+  fMaxPhi( 0 ),
+  fMaxTheta( 0 ),
+  fMinPhi( 0 ),
+  fMinTheta( 0 ) {
 
   fMessenger = new EMCalPrimaryGeneratorActionMessenger( this );
 
   fParticleGun = new G4ParticleGun( 1 );
 
-  // By default emission is point-like with an energy of 6 MeV
+  // By default emission is point-like with an energy of 6 MeV and unitary vector ( 0, 0, 0 )
   fEmissionEnergy = new EMCalPoint;
   static_cast<EMCalPoint*>( fEmissionEnergy ) -> SetEnergy( 6.*MeV );
 
@@ -33,9 +40,18 @@ EMCalPrimaryGeneratorAction::~EMCalPrimaryGeneratorAction() { delete fParticleGu
 
 void EMCalPrimaryGeneratorAction::GeneratePrimaries( G4Event *event ) {
   
+  // Sets the particle energy
   fParticleGun -> SetParticleEnergy( fEmissionEnergy -> GetRandom() );
+  // Sets the particle position
   fParticleGun -> SetParticlePosition( G4ThreeVector( 0, 0, 0 ) );
-  fParticleGun -> SetParticleMomentumDirection( G4ThreeVector( 0., 0., 1.) );
+  // Sets the momentum of the incident particle
+  G4double
+    phi   = CLHEP::RandFlat::shoot( fMinPhi  , fMaxPhi   ),
+    theta = CLHEP::RandFlat::shoot( fMinTheta, fMaxTheta ),
+    sinth = std::sin( theta );
+  fParticleGun -> SetParticleMomentumDirection( G4ThreeVector( sinth*std::cos( phi ),
+							       sinth*std::sin( phi ),
+							       std::cos( theta ) ) );
 
   fParticleGun -> GeneratePrimaryVertex( event );
 }
@@ -61,9 +77,6 @@ void EMCalPrimaryGeneratorAction::SetEnergyShape( G4String shape ) {
   else {
 
     G4cout << "Energy shape <" << shape << "> not known" << G4endl;
-    G4cout << "Energy emission set to default values" << G4endl;
-
-    fEmissionEnergy = new EMCalPoint;
-    static_cast<EMCalPoint*>( fEmissionEnergy ) -> SetEnergy( 6*MeV );
   }
 }
+
