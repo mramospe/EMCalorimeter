@@ -6,6 +6,7 @@
 #include "G4RunManager.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4UnitsTable.hh"
+#include "G4Colour.hh"
 #include "globals.hh"
 
 #include <vector>
@@ -34,6 +35,7 @@ public:
   // Messenger methods
   void        DefineMaterials();
   inline void PrintParameters();
+  inline void SetDetectorColour( G4String key );
   inline void SetDetectorMaterial( G4String material );
   inline void SetDistance( G4double value );
   inline void SetModuleHalfLengthX( G4double hlength );
@@ -44,6 +46,7 @@ public:
   inline void SetNyModules( G4int nmodules );
   inline void SetNzModules( G4int nmodules );
   inline void SetSGVolume( G4bool dec );
+  inline void SetSGVolumeColour( G4String key );
   inline void SetSGVolumeMaterial( G4String material );
   inline void SetWorldHalfLengthX( G4double hlength );
   inline void SetWorldHalfLengthY( G4double hlength );
@@ -60,6 +63,7 @@ protected:
   std::vector<G4LogicalVolume*>  fDetectorArray;
 
   // Messenger attributes
+  G4Colour fDetectorColour;
   G4String fDetectorMaterial;
   G4double fDistance;
   G4double fModuleHalfLengthX;
@@ -70,12 +74,12 @@ protected:
   G4int    fNyModules;
   G4int    fNzModules;
   G4bool   fSGVolume;
+  G4Colour fSGVolumeColour;
   G4String fSGVolumeMaterial;
   G4String fWorldMaterial;
   G4double fWorldHalfLengthX;
   G4double fWorldHalfLengthY;
   G4double fWorldHalfLengthZ;
-
 };
 
 inline const G4LogicalVolume*
@@ -109,11 +113,26 @@ inline void EMCalDetectorConstruction::PrintParameters() {
   G4cout << " *** Detector parameters ***" << G4endl;
   G4cout << " World material:   \t" << fWorldMaterial    << G4endl;
   G4cout << " Detector material:\t" << fDetectorMaterial << G4endl;
-  G4cout << " SGVolume material:\t" << fSGVolumeMaterial << G4endl;
+  if ( fSGVolume )
+    G4cout << " SGVolume material:\t" << fSGVolumeMaterial << G4endl;
   G4cout << " World dimensions: \t"
 	 << G4BestUnit( fWorldHalfLengthX, "Length" ) << "\t"
 	 << G4BestUnit( fWorldHalfLengthY, "Length" ) << "\t"
 	 << G4BestUnit( fWorldHalfLengthZ, "Length" ) << G4endl;
+  G4cout << " Number of modules ( Nx, Ny, Nz ):\t"
+	 << fNxModules << "\t"
+	 << fNyModules << "\t"
+	 << fNzModules << G4endl;
+  G4cout << " Size of the modules ( X, Y, Z ): \t"
+	 << fModuleHalfLengthX << "\t"
+	 << fModuleHalfLengthY << "\t"
+	 << fModuleHalfLengthZ << G4endl;
+  if ( fSGVolume )
+    G4cout << " Detector/module proportion:      \t" << fModuleProportion << G4endl;
+  G4cout << " Distance to source:              \t" << fDistance << G4endl;
+}
+inline void EMCalDetectorConstruction::SetDetectorColour( G4String key ) {
+  G4Colour::GetColour( key, fDetectorColour );
 }
 inline void EMCalDetectorConstruction::SetDetectorMaterial( G4String material ) {
   fDetectorMaterial = material;
@@ -145,6 +164,9 @@ inline void EMCalDetectorConstruction::SetNzModules( G4int nmodules ) {
 }
 inline void EMCalDetectorConstruction::SetSGVolume( G4bool dec ) {
   fSGVolume = dec;
+}
+inline void EMCalDetectorConstruction::SetSGVolumeColour( G4String key ) {
+  G4Colour::GetColour( key, fSGVolumeColour );
 }
 inline void EMCalDetectorConstruction::SetSGVolumeMaterial( G4String material ) {
   fSGVolumeMaterial = material;

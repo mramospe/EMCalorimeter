@@ -4,7 +4,6 @@
 
 #include "G4NistManager.hh"
 #include "G4Box.hh"
-#include "G4Colour.hh"
 #include "G4Cons.hh"
 #include "G4Orb.hh"
 #include "G4Sphere.hh"
@@ -52,6 +51,10 @@ EMCalDetectorConstruction::EMCalDetectorConstruction() :
   // Proportion detector_width/complete_width
   fModuleProportion = 1*m/( 1*m + 5*cm );
 
+  // Colours of the detector
+  fDetectorColour = G4Colour( 0. , 0.6, 0.1, 0.85 );
+  fSGVolumeColour = G4Colour( 0.6, 0.6, 0.6, 1.   );
+
   // Defines the materials
   this -> DefineMaterials();
 }
@@ -80,8 +83,8 @@ G4VPhysicalVolume* EMCalDetectorConstruction::Construct() {
   // Get nist material manager
   G4NistManager *nist = G4NistManager::Instance();
 
-  // Activates checking for overlaps
-  bool checkOverlaps = true;
+  // Activates checking for overlaps ( < true > for debugging )
+  bool checkOverlaps = false;
 
   // Materials definition
   G4Material
@@ -124,11 +127,6 @@ G4VPhysicalVolume* EMCalDetectorConstruction::Construct() {
   
   // -------------------------------------------------------------------------------
   // Detector construction
-
-  G4Colour
-    detColor( 0., 0.6, 0.1, 0.85 ),
-    sgvColor( 0.6, 0.6, 0.6, 1. );
-
   std::stringstream  modName, detName, sgvName;
 
   // If the shower-generator volume is not enabled the proportion is set to one
@@ -192,7 +190,7 @@ G4VPhysicalVolume* EMCalDetectorConstruction::Construct() {
 					detPosition,
 					logicWorld,
 					checkOverlaps );
-	module -> SetDetectorVisAttributes( new G4VisAttributes( detColor ) );
+	module -> SetDetectorVisAttributes( new G4VisAttributes( fDetectorColour ) );
 
 	fDetectorArray.push_back( module -> GetLogicalDetector() );
 
@@ -217,7 +215,7 @@ G4VPhysicalVolume* EMCalDetectorConstruction::Construct() {
 					  sgvPosition,
 					  logicWorld,
 					  checkOverlaps );
-	  module -> SetSGVolumeVisAttributes( new G4VisAttributes( sgvColor ) );
+	  module -> SetSGVolumeVisAttributes( new G4VisAttributes( fSGVolumeColour ) );
 
 	  fSGVolumeArray.push_back( module -> GetLogicalSGVolume() );
 	}

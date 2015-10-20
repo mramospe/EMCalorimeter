@@ -10,6 +10,7 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "globals.hh"
 
@@ -25,6 +26,7 @@ protected:
   EMCalDetectorConstruction *fDetector;
   G4UIdirectory             *fEMCalDir;
   G4UIdirectory             *fDetDir;
+  G4UIcmdWithAString        *fDetectorColourCmd;
   G4UIcmdWithAString        *fDetectorMaterialCmd;
   G4UIcmdWithADoubleAndUnit *fDistanceCmd;
   G4UIcmdWithADoubleAndUnit *fModuleHalfLengthXcmd;
@@ -36,6 +38,7 @@ protected:
   G4UIcmdWithAnInteger      *fNzModulesCmd;
   G4UIcmdWithoutParameter   *fPrintCmd;
   G4UIcmdWithABool          *fSGVolumeCmd;
+  G4UIcmdWithAString        *fSGVolumeColourCmd;
   G4UIcmdWithAString        *fSGVolumeMaterialCmd;
   G4UIcmdWithoutParameter   *fUpdateCmd;
   G4UIcmdWithADoubleAndUnit *fWorldHalfLengthXcmd;

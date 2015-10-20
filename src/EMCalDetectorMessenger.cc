@@ -10,6 +10,12 @@ EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) :
   fDetDir = new G4UIdirectory( "/EMCal/detector/" );
   fDetDir -> SetGuidance( "Detector control" );
 
+  fDetectorColourCmd
+    = new G4UIcmdWithAString( "/EMCal/detector/setDetectorColour", this );
+  fDetectorColourCmd -> SetGuidance( "Colour of the detector volume" );
+  fDetectorColourCmd -> SetParameterName( "DetectorColour", false );
+  fDetectorColourCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
+
   fDetectorMaterialCmd
     = new G4UIcmdWithAString( "/EMCal/detector/setDetectorMaterial", this );
   fDetectorMaterialCmd -> SetGuidance( "Select the world material" );
@@ -74,7 +80,7 @@ EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) :
   fNzModulesCmd -> SetParameterName( "NzModules", false );
   fNzModulesCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );  
 
-  fPrintCmd = new G4UIcmdWithoutParameter( "/EMCal/detector/print", this );
+  fPrintCmd = new G4UIcmdWithoutParameter( "/EMCal/detector/printParameters", this );
   fPrintCmd -> SetGuidance("Prints geometry");
   fPrintCmd -> AvailableForStates( G4State_Idle );
 
@@ -83,6 +89,12 @@ EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) :
   fSGVolumeCmd -> SetGuidance( "Enable or disable the shower-generator volume" );
   fSGVolumeCmd -> SetParameterName( "SGVolume", false );
   fSGVolumeCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
+
+  fSGVolumeColourCmd
+    = new G4UIcmdWithAString( "/EMCal/detector/setSGVolumeColour", this );
+  fSGVolumeColourCmd -> SetGuidance( "Colour of the detector volume" );
+  fSGVolumeColourCmd -> SetParameterName( "SGVolumeColour", false );
+  fSGVolumeColourCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 
   fSGVolumeMaterialCmd
     = new G4UIcmdWithAString( "/EMCal/detector/setSGVolumeMaterial", this );
@@ -133,6 +145,7 @@ EMCalDetectorMessenger::~EMCalDetectorMessenger() {
 
   delete fEMCalDir;
   delete fDetDir;
+  delete fDetectorColourCmd;
   delete fDetectorMaterialCmd;
   delete fDistanceCmd;
   delete fModuleHalfLengthXcmd;
@@ -144,6 +157,7 @@ EMCalDetectorMessenger::~EMCalDetectorMessenger() {
   delete fNzModulesCmd;
   delete fPrintCmd;
   delete fSGVolumeCmd;
+  delete fSGVolumeColourCmd;
   delete fSGVolumeMaterialCmd;
   delete fUpdateCmd;
   delete fWorldHalfLengthXcmd;
@@ -154,58 +168,66 @@ EMCalDetectorMessenger::~EMCalDetectorMessenger() {
 
 void EMCalDetectorMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
 
-  if ( command == fDetectorMaterialCmd )
+  // Detector parameters
+  if      ( command == fDetectorColourCmd )
+    fDetector -> SetDetectorColour( value );
+  else if ( command == fDetectorMaterialCmd )
     fDetector -> SetDetectorMaterial( value );
-  if ( command == fDistanceCmd )
+  else if ( command == fDistanceCmd )
     fDetector -> SetDistance( fDistanceCmd -> GetNewDoubleValue( value ) );
 
-  if ( command == fModuleHalfLengthXcmd )
+  // Module parameters
+  else if ( command == fModuleHalfLengthXcmd )
     fDetector ->
       SetModuleHalfLengthX( fModuleHalfLengthXcmd -> GetNewDoubleValue( value ) );
-  if ( command == fModuleHalfLengthYcmd )
+  else if ( command == fModuleHalfLengthYcmd )
     fDetector ->
       SetModuleHalfLengthY( fModuleHalfLengthYcmd -> GetNewDoubleValue( value ) );
-  if ( command == fModuleHalfLengthZcmd )
+  else if ( command == fModuleHalfLengthZcmd )
     fDetector ->
       SetModuleHalfLengthZ( fModuleHalfLengthZcmd -> GetNewDoubleValue( value ) );
-
-  if ( command == fModuleProportionCmd )
+  else if ( command == fModuleProportionCmd )
     fDetector ->
       SetModuleProportion( fModuleProportionCmd -> GetNewDoubleValue( value ) );
-
-  if ( command == fNxModulesCmd )
+  else if ( command == fNxModulesCmd )
     fDetector ->
       SetNxModules( fNxModulesCmd -> GetNewIntValue( value ) );
-  if ( command == fNyModulesCmd )
+  else if ( command == fNyModulesCmd )
     fDetector ->
       SetNyModules( fNyModulesCmd -> GetNewIntValue( value ) );
-  if ( command == fNzModulesCmd )
+  else if ( command == fNzModulesCmd )
     fDetector ->
       SetNzModules( fNzModulesCmd -> GetNewIntValue( value ) );
 
-  if ( command == fPrintCmd )
+  // To print the detector parameters
+  else if ( command == fPrintCmd )
     fDetector -> PrintParameters();
 
-  if ( command == fSGVolumeCmd )
-    fDetector ->
-      SetSGVolume( fSGVolumeCmd -> GetNewBoolValue( value ) );
-
-  if ( command == fSGVolumeMaterialCmd )
+  // SGV parameters
+  else if ( command == fSGVolumeCmd )
+    fDetector -> SetSGVolume( fSGVolumeCmd -> GetNewBoolValue( value ) );
+  else if ( command == fSGVolumeColourCmd )
+    fDetector -> SetSGVolumeColour( value );
+  else if ( command == fSGVolumeMaterialCmd )
     fDetector -> SetSGVolumeMaterial( value );
 
-  if ( command == fUpdateCmd )
+  // To update the geometry
+  else if ( command == fUpdateCmd )
     fDetector -> UpdateGeometry();
 
-  if ( command == fWorldHalfLengthXcmd )
-    fDetector ->
-      SetWorldHalfLengthX( fWorldHalfLengthXcmd -> GetNewDoubleValue( value ) );
-  if ( command == fWorldHalfLengthYcmd )
+  // World parameters
+  else if ( command == fWorldHalfLengthXcmd )
+    fDetector -> SetWorldHalfLengthX( fWorldHalfLengthXcmd -> GetNewDoubleValue( value ) );
+  else if ( command == fWorldHalfLengthYcmd )
     fDetector ->
       SetWorldHalfLengthY( fWorldHalfLengthYcmd -> GetNewDoubleValue( value ) );
-  if ( command == fWorldHalfLengthZcmd )
+  else if ( command == fWorldHalfLengthZcmd )
     fDetector ->
       SetWorldHalfLengthZ( fWorldHalfLengthZcmd -> GetNewDoubleValue( value ) );
-
-  if ( command == fWorldMaterialCmd )
+  else if ( command == fWorldMaterialCmd )
     fDetector -> SetWorldMaterial( value );
+
+  // Otherwise a message is sent
+  else
+    G4cout << "WARNING: Command with name: < " << command << " > not known" << G4endl;
 }
