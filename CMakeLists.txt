@@ -1,3 +1,12 @@
+#########################################
+#                                       #
+#  AUTHOR: Miguel Ramos Pernas          #
+#  e-mail: miguel.ramos.pernas@cern.ch  #
+#                                       # 
+#  Last update: 26/10/2015              #
+#                                       #
+#########################################
+
 #----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)

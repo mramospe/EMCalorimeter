@@ -1,16 +1,42 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the ActionInitialization class for the EMCalorimeter application,    //
+//  which generates the PrimaryGeneratorAction, RunAction, EventAction and       //
+//  SteppingAction.                                                              //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #ifndef EMCalActionInitialization_h
 #define EMCalActionInitialization_h 1
 
 #include "G4VUserActionInitialization.hh"
 
-class EMCalActionInitialization : public G4VUserActionInitialization
-{
+
+//_______________________________________________________________________________
+
+class EMCalActionInitialization : public G4VUserActionInitialization {
+
   public:
+
+  // Constructor and destructor
     EMCalActionInitialization();
     virtual ~EMCalActionInitialization();
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+  // Methods
+  virtual void BuildForMaster() const;
+  virtual void Build() const;
 };
 
 #endif

@@ -1,13 +1,29 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the ActionInitialization class for the EMCalorimeter application,    //
+//  which generates the PrimaryGeneratorAction, RunAction, EventAction and       //
+//  SteppingAction.                                                              //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #include "EMCalDetectorConstruction.hh"
 #include "EMCalDetectorMessenger.hh"
 #include "EMCalSteppingAction.hh"
 
 #include "G4NistManager.hh"
 #include "G4Box.hh"
-#include "G4Cons.hh"
-#include "G4Orb.hh"
-#include "G4Sphere.hh"
-#include "G4Trd.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
@@ -15,7 +31,8 @@
 
 #include <sstream>
 
-//___________________________________________________________
+
+//_______________________________________________________________________________
 // Constructor
 EMCalDetectorConstruction::EMCalDetectorConstruction() :
   G4VUserDetectorConstruction() {
@@ -59,7 +76,7 @@ EMCalDetectorConstruction::EMCalDetectorConstruction() :
   this -> DefineMaterials();
 }
 
-//___________________________________________________________
+//_______________________________________________________________________________
 // Destructor
 EMCalDetectorConstruction::~EMCalDetectorConstruction() {
 
@@ -69,7 +86,7 @@ EMCalDetectorConstruction::~EMCalDetectorConstruction() {
 	it != fModuleArray.end(); it++ ) delete *it;
 }
 
-//___________________________________________________________
+//_______________________________________________________________________________
 // Constructs the detector
 G4VPhysicalVolume* EMCalDetectorConstruction::Construct() {
 
@@ -100,7 +117,7 @@ G4VPhysicalVolume* EMCalDetectorConstruction::Construct() {
     sgvMaterial = G4Material::GetMaterial( fSGVolumeMaterial );
 
   // ----------------------------------
-  // World
+  // World construction
   
   G4Box *solidWorld =    
     new G4Box( "World",
@@ -228,6 +245,8 @@ G4VPhysicalVolume* EMCalDetectorConstruction::Construct() {
   return physWorld;
 }
 
+//_______________________________________________________________________________
+// Defines different materials
 void EMCalDetectorConstruction::DefineMaterials() { 
 
   // Atomic number and atomic mass

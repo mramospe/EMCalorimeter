@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  This is the messenger for the EMCalDetectorConstruction class. All commands  //
+//  are available in the states PreInit and Idle.                                //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #ifndef EMCalDetectorMessenger_h
 #define EMCalDetectorMessenger_h 1
 
@@ -14,15 +33,25 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "globals.hh"
 
+
+//_______________________________________________________________________________
+
 class EMCalDetectorMessenger: public G4UImessenger {
 
 public:
+
+  // Constructor
   EMCalDetectorMessenger( EMCalDetectorConstruction *detector );
+
+  // Destructor
   ~EMCalDetectorMessenger();
 
+  // Method
   void SetNewValue( G4UIcommand *command, G4String value );
 
 protected:
+
+  // Attributes
   EMCalDetectorConstruction *fDetector;
   G4UIdirectory             *fEMCalDir;
   G4UIdirectory             *fDetDir;

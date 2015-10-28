@@ -1,21 +1,45 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  This is the messenger for the EMCalDetectorConstruction class. All commands  //
+//  are available in the states PreInit and Idle.                                //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #include "EMCalDetectorMessenger.hh"
 
-EMCalDetectorMessenger::
-EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) :
-  fDetector( detector ) {
 
+//_______________________________________________________________________________
+// Constructor
+EMCalDetectorMessenger::
+EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) : fDetector( detector ) {
+
+  // Defines the detector directories
   fEMCalDir = new G4UIdirectory( "/EMCal/" );
   fEMCalDir -> SetGuidance( "UI commands of EMCal program" );
 
   fDetDir = new G4UIdirectory( "/EMCal/detector/" );
   fDetDir -> SetGuidance( "Detector control" );
 
+  // To define the detector colour
   fDetectorColourCmd
     = new G4UIcmdWithAString( "/EMCal/detector/setDetectorColour", this );
   fDetectorColourCmd -> SetGuidance( "Colour of the detector volume" );
   fDetectorColourCmd -> SetParameterName( "DetectorColour", false );
   fDetectorColourCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 
+  // To define the detector material
   fDetectorMaterialCmd
     = new G4UIcmdWithAString( "/EMCal/detector/setDetectorMaterial", this );
   fDetectorMaterialCmd -> SetGuidance( "Select the world material" );
@@ -23,6 +47,7 @@ EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) :
   fDetectorMaterialCmd -> SetDefaultValue( "G4_SODIUM_IODIDE" );
   fDetectorMaterialCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 
+  // Distance from source
   fDistanceCmd
     = new G4UIcmdWithADoubleAndUnit( "/EMCal/detector/setDistance", this );
   fDistanceCmd -> SetGuidance( "Distance from the source to the detector" );
@@ -31,6 +56,7 @@ EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) :
   fDistanceCmd -> SetUnitCategory( "Length" );
   fDistanceCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 
+  // Modules' size
   fModuleHalfLengthXcmd
     = new G4UIcmdWithADoubleAndUnit( "/EMCal/detector/setModuleHalfLengthX", this );
   fModuleHalfLengthXcmd -> SetGuidance( "Select the x-halflength of the modules" );
@@ -55,6 +81,7 @@ EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) :
   fModuleHalfLengthZcmd -> SetUnitCategory( "Length" );
   fModuleHalfLengthZcmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 
+  // Proportion of the detector
   fModuleProportionCmd
     = new G4UIcmdWithADouble( "/EMCal/detector/setModuleProportion", this );
   fModuleProportionCmd ->
@@ -62,6 +89,7 @@ EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) :
   fModuleProportionCmd -> SetParameterName( "ModuleProportion", false );
   fModuleProportionCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );  
 
+  // Number of modules in each direction
   fNxModulesCmd
     = new G4UIcmdWithAnInteger( "/EMCal/detector/setNxModules", this );
   fNxModulesCmd -> SetGuidance( "Set the number of X-modules" );
@@ -80,6 +108,7 @@ EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) :
   fNzModulesCmd -> SetParameterName( "NzModules", false );
   fNzModulesCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );  
 
+  // Print command
   fPrintCmd = new G4UIcmdWithoutParameter( "/EMCal/detector/printParameters", this );
   fPrintCmd -> SetGuidance("Prints geometry");
   fPrintCmd -> AvailableForStates( G4State_Idle );
@@ -90,12 +119,14 @@ EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) :
   fSGVolumeCmd -> SetParameterName( "SGVolume", false );
   fSGVolumeCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 
+  // To define the shower-generator volume colour
   fSGVolumeColourCmd
     = new G4UIcmdWithAString( "/EMCal/detector/setSGVolumeColour", this );
   fSGVolumeColourCmd -> SetGuidance( "Colour of the detector volume" );
   fSGVolumeColourCmd -> SetParameterName( "SGVolumeColour", false );
   fSGVolumeColourCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 
+  // To define the shower-generator volume material
   fSGVolumeMaterialCmd
     = new G4UIcmdWithAString( "/EMCal/detector/setSGVolumeMaterial", this );
   fSGVolumeMaterialCmd -> SetGuidance( "Select the world material" );
@@ -103,11 +134,13 @@ EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) :
   fSGVolumeMaterialCmd -> SetDefaultValue( "G4_Pb" );
   fSGVolumeMaterialCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 
+  // Command to update the geometry
   fUpdateCmd = new G4UIcmdWithoutParameter( "/EMCal/detector/update", this );
   fUpdateCmd -> SetGuidance( "Update geometry" );
   fUpdateCmd -> SetGuidance( "This command MUST be applied before \"beamOn\"" );
   fUpdateCmd -> AvailableForStates( G4State_Idle );
 
+  // To change the world parameters
   fWorldMaterialCmd
     = new G4UIcmdWithAString( "/EMCal/detector/setWorldMaterial", this );
   fWorldMaterialCmd -> SetGuidance( "Select the world material" );
@@ -138,9 +171,10 @@ EMCalDetectorMessenger( EMCalDetectorConstruction *detector ) :
   fWorldHalfLengthZcmd -> SetRange( "WorldHalfLengthZ > 0" );
   fWorldHalfLengthZcmd -> SetUnitCategory( "Length" );
   fWorldHalfLengthZcmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
-  
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalDetectorMessenger::~EMCalDetectorMessenger() {
 
   delete fEMCalDir;
@@ -166,6 +200,8 @@ EMCalDetectorMessenger::~EMCalDetectorMessenger() {
   delete fWorldMaterialCmd;
 }
 
+//_______________________________________________________________________________
+// Method to set a new value
 void EMCalDetectorMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
 
   // Detector parameters

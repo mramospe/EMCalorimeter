@@ -1,4 +1,5 @@
-# This macro allows to configure the physics lists used in the simulation
+# This macro allows to configure the physics lists used in the simulation. To add another
+# physics library simply uncomment the corresponding line.
 /EMCal/physics/enableDecay
 #/EMCal/physics/enableEmDNA
 #/EMCal/physics/enableEmExtra
