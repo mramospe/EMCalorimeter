@@ -12,12 +12,6 @@
 # Initialize kernel
 /run/initialize
 #
-# Number of events per print
-/EMCal/run/setPrintModule 10000
-#
-# Sets the shower-generator volume status
-/EMCal/detector/SGVenabled true
-#
 # Sets the materials
 /EMCal/detector/setWorldMaterial    Air
 /EMCal/detector/setDetectorMaterial NaI
@@ -29,14 +23,17 @@
 /EMCal/detector/setNzModules 1
 #
 # Sets the dimensions of the world
-/EMCal/detector/setWorldHalfLengthX 20 cm
-/EMCal/detector/setWorldHalfLengthY 20 cm
-/EMCal/detector/setWorldHalfLengthZ 20 cm
+/EMCal/detector/setWorldHalfLengthX 40 cm
+/EMCal/detector/setWorldHalfLengthY 40 cm
+/EMCal/detector/setWorldHalfLengthZ 40 cm
 #
 # Sets the half lengths of the calorimeter
-/EMCal/detector/setModuleHalfLengthX 2.5 cm
-/EMCal/detector/setModuleHalfLengthY 2.5 cm
-/EMCal/detector/setModuleHalfLengthZ 3.0 cm
+/EMCal/detector/setModuleHalfLengthX 8  cm
+/EMCal/detector/setModuleHalfLengthY 8  cm
+/EMCal/detector/setModuleHalfLengthZ 10 cm
+#
+# Sets the shower-generator volume status
+/EMCal/detector/SGVenabled false
 #
 # Sets the proportion between the detector and the SGV
 /EMCal/detector/setModuleProportion 0.99
@@ -48,7 +45,7 @@
 /EMCal/detector/update
 #
 # Sets the print module
-/EMCal/event/setPrintModule 100000
+/EMCal/event/setPrintModule 10000
 #
 # Sets the file name
 /EMCal/run/setFileName EMCalResults.root
@@ -61,8 +58,8 @@
 #
 # Selects the shape of the energy distribution
 /EMCal/emission/energy/setShape Gauss
-/EMCal/emission/energy/setMean  15 MeV
-/EMCal/emission/energy/setSigma 5  MeV
+/EMCal/emission/energy/setMean  6    MeV
+/EMCal/emission/energy/setSigma 0.05 MeV
 #
 # Initializes the run
-/run/beamOn 10000
+/run/beamOn 100000
