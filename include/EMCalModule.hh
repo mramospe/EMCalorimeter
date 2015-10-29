@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the class EMCalModule. The detector is composed by a number of this  //
+//  modules, which have two parts, an active part and a shower-generator volume  //
+//  ( SGV ).                                                                     //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
 #ifndef EMCalModule_h
 #define EMCalModule_h 1
 
@@ -9,6 +28,9 @@
 #include "G4String.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VisAttributes.hh"
+
+
+//_______________________________________________________________________________
 
 class EMCalModule {
 
@@ -50,7 +72,6 @@ public:
 protected:
 
   // Attributes
-
   G4String         fID;
   G4LogicalVolume *fLogicalDetector;
   G4LogicalVolume *fLogicalSGVolume;

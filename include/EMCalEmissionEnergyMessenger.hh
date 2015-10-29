@@ -1,3 +1,22 @@
+//////////////////////////////////////////////////////////////////////////////////////
+// -------------------------------------------------------------------------------- //
+//                                                                                  //
+//  AUTHOR: Miguel Ramos Pernas                                                     //
+//  e-mail: miguel.ramos.pernas@cern.ch                                             //
+//                                                                                  //
+//  Last update: 26/10/2015                                                         //
+//                                                                                  //
+// -------------------------------------------------------------------------------- //
+//                                                                                  //
+//  Description:                                                                    //
+//                                                                                  //
+//  Implements the messenger to control the energy emission of the simulation. For  //
+//  each different energy shape there is an specific messenger.                     //
+//                                                                                  //
+// -------------------------------------------------------------------------------- //
+//////////////////////////////////////////////////////////////////////////////////////
+
+
 #ifndef EMCalEmissionEnergyMessenger_h
 #define EMCalEmissionEnergyMessenger_h 1
 
@@ -9,118 +28,154 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
 
-// ____________________________________________________
 
+//_______________________________________________________________________________
+// Messenger for the Breit-Wigner shape
 class EMCalBreitWignerMessenger: public G4UImessenger {
 
 public:
-EMCalBreitWignerMessenger( EMCalBreitWigner *randGen );
-~EMCalBreitWignerMessenger();
 
-void SetNewValue( G4UIcommand *command, G4String value );
+  // Constructor and destructor
+  EMCalBreitWignerMessenger( EMCalBreitWigner *randGen );
+  ~EMCalBreitWignerMessenger();
+
+  // Method
+  void SetNewValue( G4UIcommand *command, G4String value );
 
 protected:
+
+  // Attributes
   EMCalBreitWigner          *fBreitWigner;
   G4UIdirectory             *fDir;
   G4UIcmdWithADoubleAndUnit *fMeanCmd;
   G4UIcmdWithADoubleAndUnit *fWidthCmd;
 };
 
-// ____________________________________________________
-
+//_______________________________________________________________________________
+// Messenger for the exponential shape
 class EMCalExponentialMessenger: public G4UImessenger {
 
 public:
-EMCalExponentialMessenger( EMCalExponential *randGen );
-~EMCalExponentialMessenger();
 
-void SetNewValue( G4UIcommand *command, G4String value );
+  // Constructor and destructor
+  EMCalExponentialMessenger( EMCalExponential *randGen );
+  ~EMCalExponentialMessenger();
+
+  // Method
+  void SetNewValue( G4UIcommand *command, G4String value );
 
 protected:
-EMCalExponential          *fExponential;
-G4UIcmdWithADoubleAndUnit *fExpParCmd;
-G4UIcmdWithADoubleAndUnit *fMaxEnergyCmd;
-G4UIcmdWithADoubleAndUnit *fMinEnergyCmd;
+
+  // Attributes
+  EMCalExponential          *fExponential;
+  G4UIcmdWithADoubleAndUnit *fExpParCmd;
+  G4UIcmdWithADoubleAndUnit *fMaxEnergyCmd;
+  G4UIcmdWithADoubleAndUnit *fMinEnergyCmd;
 };
 
-// ____________________________________________________
-
+//_______________________________________________________________________________
+// Messenger for the flat shape
 class EMCalFlatMessenger: public G4UImessenger {
 
 public:
-EMCalFlatMessenger( EMCalFlat *randGen );
-~EMCalFlatMessenger();
 
-void SetNewValue( G4UIcommand *command, G4String value );
+  // Constructor and destructor
+  EMCalFlatMessenger( EMCalFlat *randGen );
+  ~EMCalFlatMessenger();
+
+  // Method
+  void SetNewValue( G4UIcommand *command, G4String value );
 
 protected:
-EMCalFlat                 *fFlat;
-G4UIcmdWithADoubleAndUnit *fMaxEnergyCmd;
-G4UIcmdWithADoubleAndUnit *fMinEnergyCmd;
+
+  // Attributes
+  EMCalFlat                 *fFlat;
+  G4UIcmdWithADoubleAndUnit *fMaxEnergyCmd;
+  G4UIcmdWithADoubleAndUnit *fMinEnergyCmd;
 };
 
-// ____________________________________________________
-
+//_______________________________________________________________________________
+// Messenger for the gamma shape
 class EMCalGammaMessenger: public G4UImessenger {
 
 public:
-EMCalGammaMessenger( EMCalGamma *randGen );
-~EMCalGammaMessenger();
 
-void SetNewValue( G4UIcommand *command, G4String value );
+  // Constructor and destructor
+  EMCalGammaMessenger( EMCalGamma *randGen );
+  ~EMCalGammaMessenger();
+
+  // Method
+  void SetNewValue( G4UIcommand *command, G4String value );
 
 protected:
-EMCalGamma         *fGamma;
-G4UIcmdWithADouble *fKcmd;
-G4UIcmdWithADouble *fLambdaCmd;
+
+  // Attributes
+  EMCalGamma         *fGamma;
+  G4UIcmdWithADouble *fKcmd;
+  G4UIcmdWithADouble *fLambdaCmd;
 };
 
-// ____________________________________________________
-
+//_______________________________________________________________________________
+// Messenger for the gaussian shape
 class EMCalGaussMessenger: public G4UImessenger {
 
 public:
-EMCalGaussMessenger( EMCalGauss *randGen );
-~EMCalGaussMessenger();
 
-void SetNewValue( G4UIcommand *command, G4String value );
+  // Constructor and destructor
+  EMCalGaussMessenger( EMCalGauss *randGen );
+  ~EMCalGaussMessenger();
+
+  // Method
+  void SetNewValue( G4UIcommand *command, G4String value );
 
 protected:
-EMCalGauss                *fGauss;
-G4UIcmdWithADoubleAndUnit *fMeanCmd;
-G4UIcmdWithADoubleAndUnit *fSigmaCmd;
+
+  // Attributes
+  EMCalGauss                *fGauss;
+  G4UIcmdWithADoubleAndUnit *fMeanCmd;
+  G4UIcmdWithADoubleAndUnit *fSigmaCmd;
 };
 
-// ____________________________________________________
-
+//_______________________________________________________________________________
+// Messenger for the linear shape
 class EMCalLinearMessenger: public G4UImessenger {
 
 public:
-EMCalLinearMessenger( EMCalLinear *randGen );
-~EMCalLinearMessenger();
 
-void SetNewValue( G4UIcommand *command, G4String value );
+  // Constructor and destructor
+  EMCalLinearMessenger( EMCalLinear *randGen );
+  ~EMCalLinearMessenger();
+
+  // Method
+  void SetNewValue( G4UIcommand *command, G4String value );
 
 protected:
-EMCalLinear               *fLinear;
-G4UIcmdWithADoubleAndUnit *fMaxEnergyCmd;
-G4UIcmdWithADouble        *fMaxMinPropCmd;
-G4UIcmdWithADoubleAndUnit *fMinEnergyCmd;
+
+  // Attributes
+  EMCalLinear               *fLinear;
+  G4UIcmdWithADoubleAndUnit *fMaxEnergyCmd;
+  G4UIcmdWithADouble        *fMaxMinPropCmd;
+  G4UIcmdWithADoubleAndUnit *fMinEnergyCmd;
 };
 
-// ____________________________________________________
-
+//_______________________________________________________________________________
+// Messenger for the point-like emission
 class EMCalPointMessenger: public G4UImessenger {
 
 public:
-EMCalPointMessenger( EMCalPoint *randGen );
-~EMCalPointMessenger();
 
-void SetNewValue( G4UIcommand *command, G4String value );
+  // Constructor and destructor
+  EMCalPointMessenger( EMCalPoint *randGen );
+  ~EMCalPointMessenger();
+
+  // Method
+  void SetNewValue( G4UIcommand *command, G4String value );
 
 protected:
-EMCalPoint                *fPoint;
-G4UIcmdWithADoubleAndUnit *fEnergyCmd;
+
+  // Attributes
+  EMCalPoint                *fPoint;
+  G4UIcmdWithADoubleAndUnit *fEnergyCmd;
 };
 
 

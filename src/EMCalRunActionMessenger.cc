@@ -1,5 +1,27 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the messenger for the RunAction class. It implements the options to  //
+//  change the output file and tree for the run.                                 //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #include "EMCalRunActionMessenger.hh"
 
+
+//_______________________________________________________________________________
+// Constructor
 EMCalRunActionMessenger::EMCalRunActionMessenger( EMCalRunAction *run ) :
   fRunAction( run ) {
 
@@ -21,6 +43,8 @@ EMCalRunActionMessenger::EMCalRunActionMessenger( EMCalRunAction *run ) :
   fOutputTreeNameCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalRunActionMessenger::~EMCalRunActionMessenger() {
 
   delete fRunDir;
@@ -28,10 +52,12 @@ EMCalRunActionMessenger::~EMCalRunActionMessenger() {
   delete fOutputTreeNameCmd;
 }
 
+//_______________________________________________________________________________
+// Sets the name of the new file or tree
 void EMCalRunActionMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
 
-  if ( command == fOutputFileNameCmd )
+  if      ( command == fOutputFileNameCmd )
     fRunAction -> CreateNewFile( value );
-  if ( command == fOutputTreeNameCmd )
+  else if ( command == fOutputTreeNameCmd )
     fRunAction -> SetOutputTreeName( value );
 }

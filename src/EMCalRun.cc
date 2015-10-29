@@ -1,9 +1,32 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the Run class. This class fills the output tree each time and event  //
+//  finishes. Thus it has access to the detector information and to the          //
+//  RunAction class.                                                             //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #include "G4ParticleGun.hh"
 
 #include "EMCalDetectorConstruction.hh"
 #include "EMCalPrimaryGeneratorAction.hh"
 #include "EMCalRun.hh"
 
+
+//_______________________________________________________________________________
+// Constructor
 EMCalRun::EMCalRun() :
   G4Run(),
   fOutputTree( 0 ),
@@ -15,6 +38,7 @@ EMCalRun::EMCalRun() :
   fTrueEnergy( 0 ),
   fVariablesVector( 0 ) {
 
+  // Gets the detector
   const EMCalDetectorConstruction *detector
     = static_cast<const EMCalDetectorConstruction*>
     ( G4RunManager::GetRunManager() -> GetUserDetectorConstruction() );
@@ -29,13 +53,21 @@ EMCalRun::EMCalRun() :
   fVariablesVector = new EMCalRun::PhysicalVariables[ fNbranches ];
 } 
 
+//_______________________________________________________________________________
+// Destructor
 EMCalRun::~EMCalRun() { delete[] fVariablesVector; }
 
+//_______________________________________________________________________________
+// Constructor for the nested class
 EMCalRun::PhysicalVariables::PhysicalVariables() :
   DetectorEnergy( 0 ), SGVolumeEnergy( 0 ), nDetInteractions( 0 ), nSgvInteractions( 0 ) { }
 
+//_______________________________________________________________________________
+// Destructor for the nested class
 EMCalRun::PhysicalVariables::~PhysicalVariables() { }
  
+//_______________________________________________________________________________
+// Fills the tree with the information of the current event
 void EMCalRun::Fill( const G4int &evtNb ) {
 
   // Gets the pointer to the particle gun
@@ -98,6 +130,9 @@ void EMCalRun::Fill( const G4int &evtNb ) {
   }
 }
 
+//_______________________________________________________________________________
+// Resets the information collected in the last event ( sets the variables to
+// zero )
 void EMCalRun::Reset() {
 
   for ( size_t idet = 0; idet < fNbranches; idet++ ) {

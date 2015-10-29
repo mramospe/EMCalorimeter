@@ -1,13 +1,36 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the messenger to manage the physics used in the simulation. It is    //
+//  designed to enable the libraries specified in the configuration file.        //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #include "EMCalPhysicsListMessenger.hh"
 
-EMCalPhysicsListMessenger::
-EMCalPhysicsListMessenger( EMCalPhysicsList *physicsList ) :
+
+//_______________________________________________________________________________
+// Constructor
+EMCalPhysicsListMessenger::EMCalPhysicsListMessenger( EMCalPhysicsList *physicsList ) :
   fPhysicsList( physicsList ) {
 
+  // Defines the physics directory
   fPhysicsDir
     = new G4UIdirectory( "/EMCal/physics/" );
   fPhysicsDir -> SetGuidance( "Physics control" );
 
+  // Defines the different commands to enable the libraries
   fDecayCmd
     = new G4UIcmdWithoutParameter( "/EMCal/physics/enableDecay", this );
   fDecayCmd -> SetGuidance( "Enables Decay physics" );
@@ -64,6 +87,8 @@ EMCalPhysicsListMessenger( EMCalPhysicsList *physicsList ) :
   fRadioactiveDecayCmd -> AvailableForStates( G4State_PreInit );
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalPhysicsListMessenger::~EMCalPhysicsListMessenger() {
 
   delete fPhysicsDir;
@@ -80,29 +105,31 @@ EMCalPhysicsListMessenger::~EMCalPhysicsListMessenger() {
   delete fRadioactiveDecayCmd;
 }
 
+//_______________________________________________________________________________
+// Enables the given library
 void EMCalPhysicsListMessenger::SetNewValue( G4UIcommand *command, G4String ) {
 
-  if ( command == fDecayCmd )
+  if      ( command == fDecayCmd )
     fPhysicsList -> EnableDecay();
-  if ( command == fEmDNACmd )
+  else if ( command == fEmDNACmd )
     fPhysicsList -> EnableEmDNA();
-  if ( command == fEmExtraCmd )
+  else if ( command == fEmExtraCmd )
     fPhysicsList -> EnableEmExtra();
-  if ( command == fLivermoreCmd )
+  else if ( command == fLivermoreCmd )
     fPhysicsList -> EnableLivermore();
-  if ( command == fLivermorePolarizedCmd )
+  else if ( command == fLivermorePolarizedCmd )
     fPhysicsList -> EnableLivermorePolarized();
-  if ( command == fPenelopeCmd )
+  else if ( command == fPenelopeCmd )
     fPhysicsList -> EnablePenelope();
-  if ( command == fEmStandardCmd )
+  else if ( command == fEmStandardCmd )
     fPhysicsList -> EnableEmStandard();
-  if ( command == fEmStandardOpt1Cmd )
+  else if ( command == fEmStandardOpt1Cmd )
     fPhysicsList -> EnableEmStandardOpt1();
-  if ( command == fEmStandardOpt2Cmd )
+  else if ( command == fEmStandardOpt2Cmd )
     fPhysicsList -> EnableEmStandardOpt2();
-  if ( command == fEmStandardOpt3Cmd )
+  else if ( command == fEmStandardOpt3Cmd )
     fPhysicsList -> EnableEmStandardOpt3();
-  if ( command == fRadioactiveDecayCmd )
+  else if ( command == fRadioactiveDecayCmd )
     fPhysicsList -> EnableRadioactiveDecay();
 }
 

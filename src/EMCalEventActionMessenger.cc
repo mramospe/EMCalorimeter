@@ -1,7 +1,27 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the messenger for the EventAction class, which has control of the    //
+//  output print rate.                                                           //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #include "EMCalEventActionMessenger.hh"
 
-EMCalEventActionMessenger::
-EMCalEventActionMessenger( EMCalEventAction *eventAction ) :
+//_______________________________________________________________________________
+// Constructor
+EMCalEventActionMessenger::EMCalEventActionMessenger( EMCalEventAction *eventAction ) :
   fEventAction( eventAction ) {
 
   fEventDir
@@ -17,12 +37,16 @@ EMCalEventActionMessenger( EMCalEventAction *eventAction ) :
 
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalEventActionMessenger::~EMCalEventActionMessenger() {
 
   delete fEventDir;
   delete fPrintModuleCmd;
 }
 
+//_______________________________________________________________________________
+// Modifies one attribute of the EventAction class
 void EMCalEventActionMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
 
   if ( command == fPrintModuleCmd )

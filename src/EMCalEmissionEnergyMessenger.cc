@@ -1,9 +1,32 @@
+//////////////////////////////////////////////////////////////////////////////////////
+// -------------------------------------------------------------------------------- //
+//                                                                                  //
+//  AUTHOR: Miguel Ramos Pernas                                                     //
+//  e-mail: miguel.ramos.pernas@cern.ch                                             //
+//                                                                                  //
+//  Last update: 26/10/2015                                                         //
+//                                                                                  //
+// -------------------------------------------------------------------------------- //
+//                                                                                  //
+//  Description:                                                                    //
+//                                                                                  //
+//  Implements the messenger to control the energy emission of the simulation. For  //
+//  each different energy shape there is an specific messenger.                     //
+//                                                                                  //
+// -------------------------------------------------------------------------------- //
+//////////////////////////////////////////////////////////////////////////////////////
+
+
 #include "EMCalEmissionEnergyMessenger.hh"
 
-// ____________________________________________________
 
-EMCalBreitWignerMessenger::
-EMCalBreitWignerMessenger( EMCalBreitWigner *randGen ) :
+//_______________________________________________________________________________
+
+// --- METHODS FOR EMCalBreitWignerMessenger CLASS ---
+
+//_______________________________________________________________________________
+// Constructor
+EMCalBreitWignerMessenger::EMCalBreitWignerMessenger( EMCalBreitWigner *randGen ) :
   fBreitWigner( randGen ) {
 
   fMeanCmd
@@ -23,12 +46,16 @@ EMCalBreitWignerMessenger( EMCalBreitWigner *randGen ) :
   fWidthCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );  
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalBreitWignerMessenger::~EMCalBreitWignerMessenger() {
 
   delete fMeanCmd;
   delete fWidthCmd;
 }
 
+//_______________________________________________________________________________
+// Modifies the value of one of the attributes
 void EMCalBreitWignerMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
   
   if ( command == fMeanCmd )
@@ -37,10 +64,13 @@ void EMCalBreitWignerMessenger::SetNewValue( G4UIcommand *command, G4String valu
     fBreitWigner -> SetWidth( fWidthCmd -> GetNewDoubleValue( value ) );
 }
 
-// ____________________________________________________
+//_______________________________________________________________________________
 
-EMCalExponentialMessenger::
-EMCalExponentialMessenger( EMCalExponential *randGen ) :
+// --- METHODS FOR EMCalExponentialMessenger CLASS ---
+
+//_______________________________________________________________________________
+// Constructor
+EMCalExponentialMessenger::EMCalExponentialMessenger( EMCalExponential *randGen ) :
   fExponential( randGen ) {
 
   fExpParCmd
@@ -66,6 +96,8 @@ EMCalExponentialMessenger( EMCalExponential *randGen ) :
   fMinEnergyCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalExponentialMessenger::~EMCalExponentialMessenger() {
 
   delete fExpParCmd;
@@ -73,6 +105,8 @@ EMCalExponentialMessenger::~EMCalExponentialMessenger() {
   delete fMinEnergyCmd;
 }
 
+//_______________________________________________________________________________
+// Modifies the value of one of the attributes
 void EMCalExponentialMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
   
   if ( command == fExpParCmd )
@@ -83,8 +117,12 @@ void EMCalExponentialMessenger::SetNewValue( G4UIcommand *command, G4String valu
     fExponential -> SetMinEnergy( fMinEnergyCmd -> GetNewDoubleValue( value ) );
 }
 
-// ____________________________________________________
+//_______________________________________________________________________________
 
+// --- METHODS FOR EMCalFlatMessenger CLASS ---
+
+//_______________________________________________________________________________
+// Constructor
 EMCalFlatMessenger::
 EMCalFlatMessenger( EMCalFlat *randGen ) :
   fFlat( randGen ) {
@@ -106,12 +144,16 @@ EMCalFlatMessenger( EMCalFlat *randGen ) :
   fMinEnergyCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalFlatMessenger::~EMCalFlatMessenger() {
 
   delete fMaxEnergyCmd;
   delete fMinEnergyCmd;
 }
 
+//_______________________________________________________________________________
+// Modifies the value of one of the attributes
 void EMCalFlatMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
   
   if ( command == fMaxEnergyCmd )
@@ -120,10 +162,13 @@ void EMCalFlatMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
     fFlat -> SetMinEnergy( fMinEnergyCmd -> GetNewDoubleValue( value ) );
 }
 
-// ____________________________________________________
+//_______________________________________________________________________________
 
-EMCalGammaMessenger::
-EMCalGammaMessenger( EMCalGamma *randGen ) :
+// --- METHODS FOR EMCalGammaMessenger CLASS ---
+
+//_______________________________________________________________________________
+// Constructor
+EMCalGammaMessenger::EMCalGammaMessenger( EMCalGamma *randGen ) :
   fGamma( randGen ) {
 
   fKcmd
@@ -141,12 +186,16 @@ EMCalGammaMessenger( EMCalGamma *randGen ) :
   fLambdaCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalGammaMessenger::~EMCalGammaMessenger() {
 
   delete fKcmd;
   delete fLambdaCmd;
 }
 
+//_______________________________________________________________________________
+// Modifies the value of one of the attributes
 void EMCalGammaMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
   
   if ( command == fKcmd )
@@ -155,10 +204,13 @@ void EMCalGammaMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
     fGamma -> SetLambda( fLambdaCmd -> GetNewDoubleValue( value ) );
 }
 
-// ____________________________________________________
+//_______________________________________________________________________________
 
-EMCalGaussMessenger::
-EMCalGaussMessenger( EMCalGauss *randGen ) :
+// --- METHODS FOR EMCalGaussMessenger CLASS ---
+
+//_______________________________________________________________________________
+// Constructor
+EMCalGaussMessenger::EMCalGaussMessenger( EMCalGauss *randGen ) :
   fGauss( randGen ) {
 
   fMeanCmd
@@ -178,12 +230,16 @@ EMCalGaussMessenger( EMCalGauss *randGen ) :
   fSigmaCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );  
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalGaussMessenger::~EMCalGaussMessenger() {
 
   delete fMeanCmd;
   delete fSigmaCmd;
 }
 
+//_______________________________________________________________________________
+// Modifies the value of one of the attributes
 void EMCalGaussMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
   
   if ( command == fMeanCmd )
@@ -192,10 +248,13 @@ void EMCalGaussMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
     fGauss -> SetSigma( fSigmaCmd -> GetNewDoubleValue( value ) );
 }
 
-// ____________________________________________________
+//_______________________________________________________________________________
 
-EMCalLinearMessenger::
-EMCalLinearMessenger( EMCalLinear *randGen ) :
+// --- METHODS FOR EMCalLinearMessenger CLASS ---
+
+//_______________________________________________________________________________
+// Constructor
+EMCalLinearMessenger::EMCalLinearMessenger( EMCalLinear *randGen ) :
   fLinear( randGen ) {
 
   fMaxEnergyCmd
@@ -222,6 +281,8 @@ EMCalLinearMessenger( EMCalLinear *randGen ) :
   fMinEnergyCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalLinearMessenger::~EMCalLinearMessenger() {
 
   delete fMaxEnergyCmd;
@@ -229,6 +290,8 @@ EMCalLinearMessenger::~EMCalLinearMessenger() {
   delete fMinEnergyCmd;
 }
 
+//_______________________________________________________________________________
+// Modifies the value of one of the attributes
 void EMCalLinearMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
   
   if ( command == fMaxEnergyCmd )
@@ -237,8 +300,12 @@ void EMCalLinearMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
     fLinear -> SetMinEnergy( fMinEnergyCmd -> GetNewDoubleValue( value ) );
 }
 
-// ____________________________________________________
+//_______________________________________________________________________________
 
+// --- METHODS FOR EMCalPointMessenger CLASS ---
+
+//_______________________________________________________________________________
+// Constructor
 EMCalPointMessenger::
 EMCalPointMessenger( EMCalPoint *randGen ) :
   fPoint( randGen ) {
@@ -252,8 +319,12 @@ EMCalPointMessenger( EMCalPoint *randGen ) :
   fEnergyCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalPointMessenger::~EMCalPointMessenger() { delete fEnergyCmd; }
 
+//_______________________________________________________________________________
+// Modifies the value of one of the attributes
 void EMCalPointMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
   
   if ( command == fEnergyCmd )

@@ -1,3 +1,24 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the RunAction class. This is the class which has control of the      //
+//  output file and trees. At the beginning of the run, a new tree is created    //
+//  whose branches are set taking into account the number of modules of the      //
+//  detector.                                                                    //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #include "EMCalRunActionMessenger.hh"
 #include "EMCalModule.hh"
 #include "EMCalRunAction.hh"
@@ -11,6 +32,9 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
+
+//_______________________________________________________________________________
+// Constructor
 EMCalRunAction::EMCalRunAction() :
   G4UserRunAction(),
   fOutputFile( 0 ),
@@ -20,6 +44,8 @@ EMCalRunAction::EMCalRunAction() :
   fMessenger = new EMCalRunActionMessenger( this );
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalRunAction::~EMCalRunAction() {
 
   delete fMessenger;
@@ -28,18 +54,8 @@ EMCalRunAction::~EMCalRunAction() {
     fOutputFile -> Close();
 }
 
-G4Run* EMCalRunAction::GenerateRun() {
-
-  // If the file does not exist it is created
-  if ( !fOutputFile )
-    this -> CreateNewFile( "EMCalorimeter_Results.root" );
-
-  // The EMCalRun class is initiated
-  fRun = new EMCalRun;
-
-  return fRun;
-}
-
+//_______________________________________________________________________________
+// Functions to be called when the run starts
 void EMCalRunAction::BeginOfRunAction( const G4Run* ) { 
 
   // Creates a new tree
@@ -83,6 +99,8 @@ void EMCalRunAction::BeginOfRunAction( const G4Run* ) {
   G4RunManager::GetRunManager() -> SetRandomNumberStore( false );
 }
 
+//_______________________________________________________________________________
+// Functions to be called when the run ends
 void EMCalRunAction::EndOfRunAction( const G4Run *run ) {
 
   // Gets the number of the event. If zero it returns.
@@ -95,4 +113,18 @@ void EMCalRunAction::EndOfRunAction( const G4Run *run ) {
 
   // Autosaves the output tree
   fOutputTree -> AutoSave();
+}
+
+//_______________________________________________________________________________
+// Generates a new run, creating a new file if necessary
+G4Run* EMCalRunAction::GenerateRun() {
+
+  // If the file does not exist it is created
+  if ( !fOutputFile )
+    this -> CreateNewFile( "EMCalorimeter_Results.root" );
+
+  // The EMCalRun class is initiated
+  fRun = new EMCalRun;
+
+  return fRun;
 }

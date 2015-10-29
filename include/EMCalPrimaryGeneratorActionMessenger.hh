@@ -1,3 +1,23 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the PrimaryGeneratorAction class. This class generates the events    //
+//  of the simulation, specifying the energy shape, emission direction and type  //
+//  of particle.                                                                 //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #ifndef EMCalPrimaryGeneratorActionMessenger_h
 #define EMCalPrimaryGeneratorActionMessenger_h 1
 
@@ -9,15 +29,23 @@
 #include "G4UIcmdWithADouble.hh"
 #include "globals.hh"
 
+
+//_______________________________________________________________________________
+
 class EMCalPrimaryGeneratorActionMessenger: public G4UImessenger {
 
 public:
+  
+  // Constructor and destructor
   EMCalPrimaryGeneratorActionMessenger( EMCalPrimaryGeneratorAction *primaryGenAct );
   ~EMCalPrimaryGeneratorActionMessenger();
 
+  // Method
   void SetNewValue( G4UIcommand *command, G4String value );
 
 protected:
+
+  // Attributes
   EMCalPrimaryGeneratorAction *fPrimaryGeneratorAction;
   G4UIdirectory               *fEmissionDir;
   G4UIdirectory               *fEmissionDirectionDir;
@@ -28,7 +56,6 @@ protected:
   G4UIcmdWithADouble          *fEmissionDirectionMaxThetaCmd;
   G4UIcmdWithADouble          *fEmissionDirectionMinPhiCmd;
   G4UIcmdWithADouble          *fEmissionDirectionMinThetaCmd;
-
 };
 
 #endif

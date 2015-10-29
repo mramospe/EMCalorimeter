@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the EventAction class for the EMCalActionInitialization. This class  //
+//  modifies RunAction to be reset each time an event finalizes. It controls     //
+//  the output print rate and the information displayed.                         //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
 
 #include "EMCalEventAction.hh"
 #include "EMCalEventActionMessenger.hh"
@@ -8,14 +27,21 @@
 
 #include <iomanip>
 
+
+//_______________________________________________________________________________
+// Constructor
 EMCalEventAction::EMCalEventAction() :
   G4UserEventAction(), fPrintModule( 1 ) {
 
   fMessenger = new EMCalEventActionMessenger( this );
 } 
 
+//_______________________________________________________________________________
+// Destructor
 EMCalEventAction::~EMCalEventAction() { delete fMessenger; }
 
+//_______________________________________________________________________________
+// All the functions that are called each time an event starts
 void EMCalEventAction::BeginOfEventAction( const G4Event* ) {
 
   // Restarts the values of the energy for all the modules
@@ -25,9 +51,11 @@ void EMCalEventAction::BeginOfEventAction( const G4Event* ) {
   run -> Reset();
 }
 
+//_______________________________________________________________________________
+// All the functions that are called each time an event ends
 void EMCalEventAction::EndOfEventAction( const G4Event *event ) {
 
-  // Finally fills the tree with the values
+  // Gets the current run
   EMCalRun *run 
     = static_cast<EMCalRun*>( G4RunManager::GetRunManager() -> 
 			      GetNonConstCurrentRun() );

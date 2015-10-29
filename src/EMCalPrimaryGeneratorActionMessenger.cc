@@ -1,19 +1,45 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the messenger for the PrimaryGeneratorAction class. It implements    //
+//  commands to control the emission direction and energy.                       //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #include "EMCalPrimaryGeneratorActionMessenger.hh"
 #include "EMCalEmissionEnergy.hh"
 
+
+//_______________________________________________________________________________
+// Constructor
 EMCalPrimaryGeneratorActionMessenger::
 EMCalPrimaryGeneratorActionMessenger( EMCalPrimaryGeneratorAction *primaryGenAct ) :
   fPrimaryGeneratorAction( primaryGenAct ) {
 
+  // Defines the emission directory
   fEmissionDir = new G4UIdirectory( "/EMCal/emission/" );
   fEmissionDir -> SetGuidance( "Emission control" );
 
+  // Defines the emission direction directory
   fEmissionDirectionDir = new G4UIdirectory( "/EMCal/emission/direction/" );
   fEmissionDirectionDir -> SetGuidance( "Direction emission control" );
 
+  // Defines the emission energy directory
   fEmissionEnergyDir = new G4UIdirectory( "/EMCal/emission/energy/" );
   fEmissionEnergyDir -> SetGuidance( "Energy emission control" );
 
+  // Defines the commands to set the emission direction
   fEmissionDirectionMaxPhiCmd
     = new G4UIcmdWithADouble( "/EMCal/emission/direction/setMaxPhi", this );
   fEmissionDirectionMaxPhiCmd -> SetGuidance( "Select the minimum phi angle of the emission" );
@@ -38,6 +64,7 @@ EMCalPrimaryGeneratorActionMessenger( EMCalPrimaryGeneratorAction *primaryGenAct
   fEmissionDirectionMinThetaCmd -> SetParameterName( "EmissionMinTheta", false );
   fEmissionDirectionMinThetaCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 
+  // Defines the command to set the energy shape of the emission
   fEnergyShapeCmd = new G4UIcmdWithAString( "/EMCal/emission/energy/setShape", this );
   fEnergyShapeCmd -> SetGuidance( "Select the shape of the energy emission" );
   fEnergyShapeCmd -> SetParameterName( "EnergyShape", false );
@@ -45,6 +72,8 @@ EMCalPrimaryGeneratorActionMessenger( EMCalPrimaryGeneratorAction *primaryGenAct
   fEnergyShapeCmd -> AvailableForStates( G4State_PreInit, G4State_Idle );
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalPrimaryGeneratorActionMessenger::~EMCalPrimaryGeneratorActionMessenger() {
 
   delete fEmissionDir;
@@ -57,8 +86,9 @@ EMCalPrimaryGeneratorActionMessenger::~EMCalPrimaryGeneratorActionMessenger() {
   delete fEnergyShapeCmd;
 }
 
-void EMCalPrimaryGeneratorActionMessenger::
-SetNewValue( G4UIcommand *command, G4String value ) {
+//_______________________________________________________________________________
+// Sets the value of one of the attributes
+void EMCalPrimaryGeneratorActionMessenger::SetNewValue( G4UIcommand *command, G4String value ) {
 
   if      ( command == fEnergyShapeCmd )
     fPrimaryGeneratorAction -> SetEnergyShape( value );

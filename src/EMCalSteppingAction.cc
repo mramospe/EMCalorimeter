@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the SteppingAction class. This class takes the information obtained  //
+//  in each step and saves it in the Run class.                                  //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #include "EMCalSteppingAction.hh"
 #include "EMCalEventAction.hh"
 #include "EMCalDetectorConstruction.hh"
@@ -8,13 +27,21 @@
 #include "G4RunManager.hh"
 #include "G4LogicalVolume.hh"
 
+
+//_______________________________________________________________________________
+// Constructor
 EMCalSteppingAction::EMCalSteppingAction( EMCalEventAction* eventAction ) :
   G4UserSteppingAction(), fEventAction( eventAction ) { }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalSteppingAction::~EMCalSteppingAction() { }
 
+//_______________________________________________________________________________
+// Functions to perform each step
 void EMCalSteppingAction::UserSteppingAction( const G4Step* step ) {
 
+  // Gets the detector
   const EMCalDetectorConstruction* detector
     = static_cast<const EMCalDetectorConstruction*>
     ( G4RunManager::GetRunManager() -> GetUserDetectorConstruction() );

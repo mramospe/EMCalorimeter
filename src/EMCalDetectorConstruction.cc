@@ -10,9 +10,9 @@
 //                                                                               //
 //  Description:                                                                 //
 //                                                                               //
-//  Defines the ActionInitialization class for the EMCalorimeter application,    //
-//  which generates the PrimaryGeneratorAction, RunAction, EventAction and       //
-//  SteppingAction.                                                              //
+//  Defines the DetectorConstruction class for the EMCalorimeter detector. This  //
+//  class posseses all the information about the position, dimensions and        //
+//  composition of the detector modules.
 //                                                                               //
 // ----------------------------------------------------------------------------- //
 ///////////////////////////////////////////////////////////////////////////////////

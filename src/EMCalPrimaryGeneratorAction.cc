@@ -1,3 +1,23 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the PrimaryGeneratorAction class. This class generates the events    //
+//  of the simulation, specifying the energy shape, emission direction and type  //
+//  of particle.                                                                 //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #include "EMCalPrimaryGeneratorAction.hh"
 #include "EMCalPrimaryGeneratorActionMessenger.hh"
 
@@ -12,6 +32,9 @@
 
 #include <cmath>
 
+
+//_______________________________________________________________________________
+// Constructor
 EMCalPrimaryGeneratorAction::EMCalPrimaryGeneratorAction() :
   G4VUserPrimaryGeneratorAction(),
   fParticleGun( 0 ),
@@ -36,8 +59,12 @@ EMCalPrimaryGeneratorAction::EMCalPrimaryGeneratorAction() :
   fParticleGun -> SetParticleDefinition( particle );
 }
 
+//_______________________________________________________________________________
+// Destructor
 EMCalPrimaryGeneratorAction::~EMCalPrimaryGeneratorAction() { delete fParticleGun; }
 
+//_______________________________________________________________________________
+// This method sets the direction, energy and type for the incident particle
 void EMCalPrimaryGeneratorAction::GeneratePrimaries( G4Event *event ) {
   
   // Sets the particle energy
@@ -56,6 +83,8 @@ void EMCalPrimaryGeneratorAction::GeneratePrimaries( G4Event *event ) {
   fParticleGun -> GeneratePrimaryVertex( event );
 }
 
+//_______________________________________________________________________________
+// Sets the shape of the energy of the incident particle
 void EMCalPrimaryGeneratorAction::SetEnergyShape( G4String shape ) {
 
   delete fEmissionEnergy;

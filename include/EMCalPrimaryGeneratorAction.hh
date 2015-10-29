@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the messenger to manage the physics used in the simulation. It is    //
+//  designed to enable the libraries specified in the configuration file.        //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #ifndef EMCalPrimaryGeneratorAction_h
 #define EMCalPrimaryGeneratorAction_h 1
 
@@ -7,16 +26,21 @@
 #include "G4ParticleGun.hh"
 #include "globals.hh"
 
-class EMCalPrimaryGeneratorActionMessenger;
 
+//_______________________________________________________________________________
+
+class EMCalPrimaryGeneratorActionMessenger;
 class G4Event;
 
 class EMCalPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 
 public:
+
+  // Constructor and destructor
   EMCalPrimaryGeneratorAction();    
   virtual ~EMCalPrimaryGeneratorAction();
 
+  // Methods
   virtual void         GeneratePrimaries( G4Event *event );         
   const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
   void                 SetEnergyShape( G4String shape );
@@ -26,6 +50,8 @@ public:
   inline void          SetMinTheta( G4double value );
   
 protected:
+  
+  // Attributes
   EMCalEmissionEnergy                  *fEmissionEnergy;
   EMCalPrimaryGeneratorActionMessenger *fMessenger;
   G4ParticleGun                        *fParticleGun;
@@ -34,9 +60,9 @@ protected:
   G4double                              fMaxTheta;
   G4double                              fMinPhi;
   G4double                              fMinTheta;
-
 };
 
+// Methods to set the values of the attributes
 inline void EMCalPrimaryGeneratorAction::SetMaxPhi( G4double value )   { fMaxPhi   = value; }
 inline void EMCalPrimaryGeneratorAction::SetMaxTheta( G4double value ) { fMaxTheta = value; }
 inline void EMCalPrimaryGeneratorAction::SetMinPhi( G4double value )   { fMinPhi   = value; }

@@ -1,9 +1,27 @@
+///////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  AUTHOR: Miguel Ramos Pernas                                                  //
+//  e-mail: miguel.ramos.pernas@cern.ch                                          //
+//                                                                               //
+//  Last update: 26/10/2015                                                      //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+//                                                                               //
+//  Description:                                                                 //
+//                                                                               //
+//  Defines the class EMCalModule. The detector is composed by a number of this  //
+//  modules, which have two parts, an active part and a shower-generator volume  //
+//  ( SGV ).                                                                     //
+//                                                                               //
+// ----------------------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #ifndef EMCalPhysicsList_h
 #define EMCalPhysicsList_h 1
 
 #include "G4VModularPhysicsList.hh"
-#include "globals.hh"
-
 #include "G4DecayPhysics.hh"
 #include "G4EmDNAPhysics.hh"
 #include "G4EmExtraPhysics.hh"
@@ -15,15 +33,22 @@
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4RadioactiveDecayPhysics.hh"
+#include "globals.hh"
+
+
+//_______________________________________________________________________________
 
 class EMCalPhysicsListMessenger;
 
 class EMCalPhysicsList: public G4VModularPhysicsList {
 
 public:
+
+  // Constructor and destructor
   EMCalPhysicsList();
   ~EMCalPhysicsList();
 
+  // Methods
   inline void EnableDecay();
   inline void EnableEmDNA();
   inline void EnableEmExtra();
@@ -37,10 +62,12 @@ public:
   inline void EnableRadioactiveDecay();
 
 protected:
+  
+  // Attributes
   EMCalPhysicsListMessenger *fMessenger;
-
 };
 
+// This functions anable the different physics libraries of Geant4
 inline void EMCalPhysicsList::EnableDecay() {
   this -> RegisterPhysics( new G4DecayPhysics );
 }
