@@ -1,0 +1,3 @@
+*** EMCalorimeter v1r0 ***
+
+Project containing the source code to simulate an electromagnetic calorimiter using Geant4 (http://geant4.web.cern.ch/geant4/) and ROOT (https://root.cern.ch/).
